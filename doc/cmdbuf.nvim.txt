@@ -1,0 +1,38 @@
+*cmdbuf.nvim.txt*
+
+==============================================================================
+Lua module: cmdbuf                                        *cmdbuf.nvim-cmdbuf*
+
+open()                                                         *cmdbuf.open()*
+  Open a command buffer.
+
+split_open({height})                                     *cmdbuf.split_open()*
+  Open a command buffer with `split`.
+
+  Parameters: ~
+    {height} (optional) window height
+
+vsplit_open({width})                                    *cmdbuf.vsplit_open()*
+  Open a command buffer with `vsplit`.
+
+  Parameters: ~
+    {width} (optional) window width
+
+tab_open()                                                 *cmdbuf.tab_open()*
+  Open a command buffer in new tab.
+
+execute({opts})                                             *cmdbuf.execute()*
+  Execute the current line command.
+
+  Parameters: ~
+    {opts} (optional) `quit`: whether quit the window after execution.
+
+==============================================================================
+EXAMPLES                                                *cmdbuf.nvim-EXAMPLES*
+
+>
+  nnoremap q: <Cmd>lua require('cmdbuf').split_open(vim.o.cmdwinheight)<CR>
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help
