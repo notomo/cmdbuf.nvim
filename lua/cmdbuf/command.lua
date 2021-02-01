@@ -12,23 +12,25 @@ function Command.new()
   return setmetatable(tbl, Command)
 end
 
-function Command.open(self, opts)
-  vim.validate({opts = {opts, "table", true}})
+function Command.open(self, layout_opts, opts)
+  vim.validate({layout_opts = {layout_opts, "table"}, opts = {opts, "table", true}})
   opts = opts or {}
 
-  local layout = Layout.new(opts.layout)
+  local layout = Layout.new(layout_opts)
 
   local bufnr = vim.fn.bufnr(("^%s$"):format(self._name))
   local already_created = bufnr ~= -1
   if not already_created then
     bufnr = vim.api.nvim_create_buf(false, true)
-    self:_load(bufnr)
+    self:_load(bufnr, opts.line)
     vim.api.nvim_buf_set_name(bufnr, self._name)
 
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<CR>", [[<Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
     vim.api.nvim_buf_set_keymap(bufnr, "i", "<CR>", [[<ESC><Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
 
     vim.cmd(("autocmd BufReadCmd <buffer=%s> lua require('cmdbuf')._reload(%s)"):format(bufnr, bufnr))
+  elseif opts.line ~= nil then
+    vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, {opts.line})
   end
 
   layout:open(bufnr)
@@ -37,6 +39,14 @@ function Command.open(self, opts)
     local count = vim.api.nvim_buf_line_count(bufnr)
     vim.api.nvim_win_set_cursor(0, {count, 0})
     vim.cmd("doautocmd BufRead") -- HACK?
+  elseif opts.line ~= nil then
+    local count = vim.api.nvim_buf_line_count(bufnr)
+    vim.api.nvim_win_set_cursor(0, {count, 0})
+  end
+
+  if opts.column ~= nil then
+    local row = vim.api.nvim_win_get_cursor(0)[1]
+    vim.api.nvim_win_set_cursor(0, {row, opts.column - 1})
   end
 end
 
@@ -78,7 +88,7 @@ function Command._quit(_, quit)
   vim.cmd("buffer #")
 end
 
-function Command._load(_, bufnr)
+function Command._load(_, bufnr, line)
   local count = vim.fn.histnr("cmd")
   local cmds = {}
   for i = 1, count, 1 do
@@ -87,7 +97,7 @@ function Command._load(_, bufnr)
       table.insert(cmds, cmd)
     end
   end
-  table.insert(cmds, "")
+  table.insert(cmds, line or "")
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, cmds)
 
   vim.bo[bufnr].filetype = "vim"

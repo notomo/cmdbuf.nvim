@@ -13,6 +13,18 @@ local gen = function()
         end,
       },
       {
+        name = "OPTIONS",
+        body = function()
+          return [[
+For `open` function                                    *cmdbuf.nvim-open-opts*
+  - `line`: set this string to the bottom line in the buffer.
+  - `column`: initial cursor column in the buffer.
+
+For `execute` function                              *cmdbuf.nvim-execute-opts*
+  - `quit`: whether quit the window after execution.]]
+        end,
+      },
+      {
         name = "EXAMPLES",
         body = function()
           local f = io.open("./spec/example.vim", "r")

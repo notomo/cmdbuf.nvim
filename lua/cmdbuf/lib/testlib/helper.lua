@@ -73,6 +73,18 @@ asserts.create("window_count"):register_eq(function()
   return vim.fn.tabpagewinnr(vim.fn.tabpagenr(), "$")
 end)
 
+asserts.create("current_line"):register_eq(function()
+  return vim.fn.getline(".")
+end)
+
+asserts.create("current_col"):register_eq(function()
+  return vim.fn.col(".")
+end)
+
+asserts.create("current_row"):register_eq(function()
+  return vim.fn.line(".")
+end)
+
 asserts.create("exists_pattern"):register(function(self)
   return function(_, args)
     local pattern = args[1]

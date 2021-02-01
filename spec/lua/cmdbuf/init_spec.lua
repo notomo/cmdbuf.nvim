@@ -128,4 +128,13 @@ history2]])
     end)
   end)
 
+  it("can open with line", function()
+    local cmd = "tabedit"
+    cmdbuf.open({line = cmd, column = #cmd})
+
+    assert.current_line("tabedit")
+    assert.current_row(vim.fn.line("$"))
+    assert.current_col(#cmd)
+  end)
+
 end)

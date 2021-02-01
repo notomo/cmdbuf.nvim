@@ -19,29 +19,33 @@ end
 local M = {}
 
 --- Open a command buffer.
-function M.open()
-  return main("open")
+--- @param (optional) |cmdbf.nvim-open-opts|
+function M.open(opts)
+  return main("open", {}, opts)
 end
 
 --- Open a command buffer with `split`.
 --- @param (optional) window height
-function M.split_open(height)
-  return main("open", {layout = {type = "split", height = height}})
+--- @param (optional) |cmdbf.nvim-open-opts|
+function M.split_open(height, opts)
+  return main("open", {type = "split", height = height}, opts)
 end
 
 --- Open a command buffer with `vsplit`.
 --- @param (optional) window width
-function M.vsplit_open(width)
-  return main("open", {layout = {type = "vsplit", width = width}})
+--- @param (optional) |cmdbf.nvim-open-opts|
+function M.vsplit_open(width, opts)
+  return main("open", {type = "vsplit", width = width}, opts)
 end
 
 --- Open a command buffer in new tab.
-function M.tab_open()
-  return main("open", {layout = {type = "tab"}})
+--- @param (optional) |cmdbf.nvim-open-opts|
+function M.tab_open(opts)
+  return main("open", {type = "tab"}, opts)
 end
 
 --- Execute the current line command.
---- @param (optional) `quit`: whether quit the window after execution.
+--- @param (optional) |cmdbf.nvim-execute-opts|
 function M.execute(opts)
   return main("execute", opts)
 end
