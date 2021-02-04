@@ -46,6 +46,12 @@ For `execute` function                              *cmdbuf.nvim-execute-opts*
   - `quit`: whether quit the window after execution.
 
 ==============================================================================
+AUTOCOMMANDS                                        *cmdbuf.nvim-AUTOCOMMANDS*
+
+CmdbufNew                                              *cmdbuf.nvim-CmdbufNew*
+  This is fired after creating a new cmdbuf.
+
+==============================================================================
 EXAMPLES                                                *cmdbuf.nvim-EXAMPLES*
 
 >
@@ -54,6 +60,15 @@ EXAMPLES                                                *cmdbuf.nvim-EXAMPLES*
     \ vim.o.cmdwinheight,
     \ {line = vim.fn.getcmdline(), column = vim.fn.getcmdpos()}
     \ )<CR><C-c>
+
+  " Custom buffer mappings
+  augroup cmdbuf_setting
+    autocmd!
+    autocmd User CmdbufNew call s:cmdbuf()
+  augroup END
+  function! s:cmdbuf() abort
+      nnoremap <buffer> q <Cmd>quit<CR>
+  endfunction
 <
 
 ==============================================================================

@@ -137,4 +137,12 @@ history2]])
     assert.current_col(#cmd)
   end)
 
+  it("fires CmdbufNew on opening a new buffer", function()
+    vim.cmd("autocmd User CmdbufNew ++once lua vim.b.cmdbuf_test = 'fired_cmdbuf_new!'")
+
+    cmdbuf.open()
+
+    assert.is_same("fired_cmdbuf_new!", vim.b.cmdbuf_test)
+  end)
+
 end)

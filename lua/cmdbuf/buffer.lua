@@ -33,7 +33,8 @@ function Buffer.open(layout, line, column)
 
   if not already_created then
     cursorlib.to_bottom(bufnr)
-    vim.cmd("doautocmd BufRead") -- HACK?
+    vim.cmd("doautocmd <nomodeline> BufRead") -- HACK?
+    vim.cmd("doautocmd <nomodeline> User CmdbufNew")
   elseif line ~= nil then
     cursorlib.to_bottom(bufnr)
   end

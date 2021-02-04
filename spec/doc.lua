@@ -15,6 +15,7 @@ local gen = function()
       {
         name = "OPTIONS",
         body = function()
+          -- TODO: use doc builder
           return [[
 For `open` function                                    *cmdbuf.nvim-open-opts*
   - `line`: set this string to the bottom line in the buffer.
@@ -22,6 +23,14 @@ For `open` function                                    *cmdbuf.nvim-open-opts*
 
 For `execute` function                              *cmdbuf.nvim-execute-opts*
   - `quit`: whether quit the window after execution.]]
+        end,
+      },
+      {
+        name = "AUTOCOMMANDS",
+        body = function()
+          return [[
+CmdbufNew                                              *cmdbuf.nvim-CmdbufNew*
+  This is fired after creating a new cmdbuf.]]
         end,
       },
       {
