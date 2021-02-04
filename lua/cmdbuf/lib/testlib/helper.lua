@@ -6,7 +6,7 @@ if err ~= nil then
 end
 M.root = root
 
-M.command = function(cmd)
+function M.command(cmd)
   local _, e = pcall(vim.cmd, cmd)
   if e then
     local info = debug.getinfo(2)
@@ -16,13 +16,13 @@ M.command = function(cmd)
   end
 end
 
-M.before_each = function()
+function M.before_each()
   require("cmdbuf.lib.cleanup")()
   vim.cmd("filetype on")
   vim.cmd("syntax enable")
 end
 
-M.after_each = function()
+function M.after_each()
   vim.cmd("tabedit")
   vim.cmd("tabonly!")
   vim.cmd("silent %bwipeout!")
@@ -30,15 +30,15 @@ M.after_each = function()
   vim.cmd("syntax off")
 end
 
-M.set_lines = function(lines)
+function M.set_lines(lines)
   vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(lines, "\n"))
 end
 
-M.input = function(text)
+function M.input(text)
   vim.api.nvim_put({text}, "c", true, true)
 end
 
-M.search = function(pattern)
+function M.search(pattern)
   local result = vim.fn.search(pattern)
   if result == 0 then
     local info = debug.getinfo(2)
@@ -96,19 +96,18 @@ asserts.create("exists_pattern"):register(function(self)
   end
 end)
 
-asserts.create("error_message"):register(function(self)
+asserts.create("exists_message"):register(function(self)
   return function(_, args)
     local expected = args[1]
-    local f = args[2]
-    local _, actual = pcall(f)
-    if not actual then
-      self:set_positive("should be error")
-      self:set_negative("should be error")
-      return false
+    self:set_positive(("`%s` not found message"):format(expected))
+    self:set_negative(("`%s` found message"):format(expected))
+    local messages = vim.split(vim.api.nvim_exec("messages", true), "\n")
+    for _, msg in ipairs(messages) do
+      if msg:match(expected) then
+        return true
+      end
     end
-    self:set_positive(("error message should end with '%s', but actual: '%s'"):format(expected, actual))
-    self:set_negative(("error message should not end with '%s', but actual: '%s'"):format(expected, actual))
-    return vim.endswith(actual, expected)
+    return false
   end
 end)
 

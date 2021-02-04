@@ -1,4 +1,6 @@
 local Layout = require("cmdbuf.layout").Layout
+local messagelib = require("cmdbuf.lib.message")
+local cursorlib = require("cmdbuf.lib.cursor")
 local vim = vim
 
 local M = {}
@@ -7,9 +9,19 @@ local Command = {}
 Command.__index = Command
 M.Command = Command
 
-function Command.new()
+function Command.new(name, ...)
   local tbl = {_name = "cmdbuf://vim/cmd-buffer"}
-  return setmetatable(tbl, Command)
+  local self = setmetatable(tbl, Command)
+
+  local args = {...}
+  local f = function()
+    return self[name](self, unpack(args))
+  end
+
+  local ok, msg = xpcall(f, debug.traceback)
+  if not ok then
+    return messagelib.error(msg)
+  end
 end
 
 function Command.open(self, layout_opts, opts)
@@ -28,7 +40,7 @@ function Command.open(self, layout_opts, opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<CR>", [[<Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
     vim.api.nvim_buf_set_keymap(bufnr, "i", "<CR>", [[<ESC><Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
 
-    vim.cmd(("autocmd BufReadCmd <buffer=%s> lua require('cmdbuf')._reload(%s)"):format(bufnr, bufnr))
+    vim.cmd(("autocmd BufReadCmd <buffer=%s> lua require('cmdbuf.command').Command.new('reload', %s)"):format(bufnr, bufnr))
   elseif opts.line ~= nil then
     vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, {opts.line})
   end
@@ -36,17 +48,14 @@ function Command.open(self, layout_opts, opts)
   layout:open(bufnr)
 
   if not already_created then
-    local count = vim.api.nvim_buf_line_count(bufnr)
-    vim.api.nvim_win_set_cursor(0, {count, 0})
+    cursorlib.to_bottom(bufnr)
     vim.cmd("doautocmd BufRead") -- HACK?
   elseif opts.line ~= nil then
-    local count = vim.api.nvim_buf_line_count(bufnr)
-    vim.api.nvim_win_set_cursor(0, {count, 0})
+    cursorlib.to_bottom(bufnr)
   end
 
   if opts.column ~= nil then
-    local row = vim.api.nvim_win_get_cursor(0)[1]
-    vim.api.nvim_win_set_cursor(0, {row, opts.column - 1})
+    cursorlib.set_column(opts.column)
   end
 end
 
@@ -70,8 +79,6 @@ function Command.execute(self, opts)
 
     vim.api.nvim_echo({{msg, "ErrorMsg"}}, true, {})
     vim.v.errmsg = msg
-
-    return nil, msg
   end
 end
 
@@ -82,7 +89,7 @@ function Command._quit(_, quit)
 
   local win_count = #vim.api.nvim_tabpage_list_wins(0)
   if win_count > 1 then
-    return vim.cmd("quit")
+    return vim.api.nvim_win_close(0, true)
   end
 
   vim.cmd("buffer #")

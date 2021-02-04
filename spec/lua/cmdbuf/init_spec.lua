@@ -123,9 +123,9 @@ history2]])
     cmdbuf.open()
     helper.set_lines([[invalid_test_cmd]])
 
-    assert.error_message("E492: Not an editor command: invalid_test_cmd", function()
-      return cmdbuf.execute({quit = true})
-    end)
+    cmdbuf.execute({quit = true})
+
+    assert.exists_message("E492: Not an editor command: invalid_test_cmd")
   end)
 
   it("can open with line", function()
