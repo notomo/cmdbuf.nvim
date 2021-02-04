@@ -1,17 +1,13 @@
 local M = {}
 
-local root, err = require("cmdbuf.lib.path").find_root("cmdbuf/*.lua")
-if err ~= nil then
-  error(err)
-end
-M.root = root
+M.root = require("cmdbuf.lib.path").find_root()
 
 function M.command(cmd)
-  local _, e = pcall(vim.cmd, cmd)
-  if e then
+  local _, err = pcall(vim.cmd, cmd)
+  if err then
     local info = debug.getinfo(2)
     local pos = ("%s:%d"):format(info.source, info.currentline)
-    local msg = ("on %s: failed excmd `%s`\n%s"):format(pos, cmd, e)
+    local msg = ("on %s: failed excmd `%s`\n%s"):format(pos, cmd, err)
     error(msg)
   end
 end
