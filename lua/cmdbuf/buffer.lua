@@ -16,6 +16,11 @@ function Buffer.open(layout, line, column)
   local name = "cmdbuf://vim/cmd-buffer"
   local bufnr = vim.fn.bufnr(("^%s$"):format(name))
   local already_created = bufnr ~= -1
+  if already_created then
+    -- NOTE: the buffer is empty if it was closed by `:quit!`
+    vim.fn.bufload(bufnr)
+  end
+
   if not already_created then
     bufnr = vim.api.nvim_create_buf(false, true)
     Buffer.load(bufnr, line)

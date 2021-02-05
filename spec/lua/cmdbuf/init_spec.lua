@@ -145,4 +145,14 @@ history2]])
     assert.is_same("fired_cmdbuf_new!", vim.b.cmdbuf_test)
   end)
 
+  it("can restore the buffer even if it was closed by :quit!", function()
+    vim.fn.histadd("cmd", "can_restore_after_quit!")
+
+    cmdbuf.split_open()
+    vim.cmd("quit!")
+    cmdbuf.split_open()
+
+    assert.exists_pattern("can_restore_after_quit!")
+  end)
+
 end)
