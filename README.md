@@ -1,3 +1,7 @@
+# cmdbuf.nvim
+
+[![ci](https://github.com/notomo/cmdbuf.nvim/workflows/ci/badge.svg?branch=main)](https://github.com/notomo/cmdbuf.nvim/actions?query=workflow%3Aci+branch%3Amain)
+
 Alternative command-line-window plugin
 
 ## Example
