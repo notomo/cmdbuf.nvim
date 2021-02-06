@@ -155,4 +155,39 @@ history2]])
     assert.exists_pattern("can_restore_after_quit!")
   end)
 
+  it("can delete a command from history", function()
+    vim.fn.histadd("cmd", "delete_target_cmd")
+
+    cmdbuf.open()
+    helper.search("delete_target_cmd")
+    cmdbuf.delete()
+    assert.no.exists_pattern("delete_target_cmd")
+
+    vim.cmd("edit!")
+    assert.no.exists_pattern("delete_target_cmd")
+  end)
+
+  it("can delete commands by given range", function()
+    vim.fn.histdel("cmd", ".*")
+    vim.fn.histadd("cmd", "ranged_delete_cmd1")
+    vim.fn.histadd("cmd", "ranged_delete_cmd2")
+    vim.fn.histadd("cmd", "ranged_delete_cmd3")
+    vim.fn.histadd("cmd", "ranged_delete_cmd4")
+
+    cmdbuf.open()
+    cmdbuf.delete({2, 3})
+
+    assert.exists_pattern("ranged_delete_cmd1")
+    assert.no.exists_pattern("ranged_delete_cmd2")
+    assert.no.exists_pattern("ranged_delete_cmd3")
+    assert.exists_pattern("ranged_delete_cmd4")
+
+    vim.cmd("edit!")
+
+    assert.exists_pattern("ranged_delete_cmd1")
+    assert.no.exists_pattern("ranged_delete_cmd2")
+    assert.no.exists_pattern("ranged_delete_cmd3")
+    assert.exists_pattern("ranged_delete_cmd4")
+  end)
+
 end)

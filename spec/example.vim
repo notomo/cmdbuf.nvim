@@ -11,4 +11,5 @@ augroup cmdbuf_setting
 augroup END
 function! s:cmdbuf() abort
   nnoremap <buffer> q <Cmd>quit<CR>
+  nnoremap <buffer> dd <Cmd>lua require('cmdbuf').delete()<CR>
 endfunction

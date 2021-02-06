@@ -35,6 +35,12 @@ execute({opts})                                             *cmdbuf.execute()*
   Parameters: ~
     {opts} (optional) |cmdbuf.nvim-execute-opts|
 
+delete({range})                                              *cmdbuf.delete()*
+  Delete current line (or given range) from command history
+
+  Parameters: ~
+    {range} (optional) 1-based range {start number, end number}
+
 ==============================================================================
 OPTIONS                                                  *cmdbuf.nvim-OPTIONS*
 
@@ -68,6 +74,7 @@ EXAMPLES                                                *cmdbuf.nvim-EXAMPLES*
   augroup END
   function! s:cmdbuf() abort
     nnoremap <buffer> q <Cmd>quit<CR>
+    nnoremap <buffer> dd <Cmd>lua require('cmdbuf').delete()<CR>
   endfunction
 <
 

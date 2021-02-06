@@ -34,4 +34,11 @@ function M.execute(opts)
   Command.new("execute", opts)
 end
 
+--- Delete current line (or given range) from command history
+--- @param (optional) 1-based range {start number, end number}
+function M.delete(range)
+  Command.new("delete", range)
+end
+
 return M
+

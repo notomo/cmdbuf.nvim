@@ -54,6 +54,29 @@ function Command.execute(opts)
   end
 end
 
+function Command.delete(range)
+  vim.validate({range = {range, "table", true}})
+
+  local s, e
+  if not range then
+    local row = vim.api.nvim_win_get_cursor(0)[1]
+    s = row - 1
+    e = row
+  end
+
+  if range then
+    vim.validate({["range[1]"] = {range[1], "number"}, ["range[2]"] = {range[2], "number"}})
+    s = range[1] - 1
+    e = range[2]
+  end
+
+  local lines = vim.api.nvim_buf_get_lines(0, s, e, false)
+  for _, line in ipairs(lines) do
+    vim.fn.histdel("cmd", ("^%s$"):format(vim.fn.escape(line, "[]\\*")))
+  end
+  vim.api.nvim_buf_set_lines(0, s, e, false, {})
+end
+
 function Command.reload(bufnr)
   Buffer.load(bufnr)
 end
