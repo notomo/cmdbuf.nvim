@@ -1,3 +1,4 @@
+local repository = require("cmdbuf.lib.repository").Repository.new("handler")
 local cursorlib = require("cmdbuf.lib.cursor")
 
 local M = {}
@@ -6,14 +7,15 @@ local Buffer = {}
 Buffer.__index = Buffer
 M.Buffer = Buffer
 
-function Buffer.open(layout, line, column)
+function Buffer.open(handler, layout, line, column)
   vim.validate({
+    handler = {handler, "table"},
     layout = {layout, "table"},
     line = {line, "string", true},
     column = {column, "number", true},
   })
 
-  local name = "cmdbuf://vim/cmd-buffer"
+  local name = ("cmdbuf://%s-buffer"):format(handler.name)
   local bufnr = vim.fn.bufnr(("^%s$"):format(name))
   local already_created = bufnr ~= -1
   if already_created then
@@ -23,7 +25,15 @@ function Buffer.open(layout, line, column)
 
   if not already_created then
     bufnr = vim.api.nvim_create_buf(false, true)
-    Buffer.load(bufnr, line)
+
+    local tbl = {_bufnr = bufnr, _handler = handler}
+    local buffer = setmetatable(tbl, Buffer)
+    repository:set(bufnr, buffer)
+
+    local err = buffer:load(line)
+    if err ~= nil then
+      return err
+    end
     vim.api.nvim_buf_set_name(bufnr, name)
 
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<CR>", [[<Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
@@ -49,21 +59,48 @@ function Buffer.open(layout, line, column)
   end
 end
 
-function Buffer.load(bufnr, line)
-  vim.validate({bufnr = {bufnr, "number"}, line = {line, "string", true}})
-
-  local count = vim.fn.histnr("cmd")
-  local cmds = {}
-  for i = 1, count, 1 do
-    local cmd = vim.fn.histget("cmd", i)
-    if cmd ~= "" then
-      table.insert(cmds, cmd)
-    end
+function Buffer.get(bufnr)
+  vim.validate({bufnr = {bufnr, "number"}})
+  local buffer = repository:get(bufnr)
+  if buffer == nil then
+    error(("state is not found in buffer: %s"):format(bufnr))
   end
-  table.insert(cmds, line or "")
-  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, cmds)
+  return buffer
+end
 
-  vim.bo[bufnr].filetype = "vim"
+function Buffer.current()
+  local bufnr = vim.api.nvim_get_current_buf()
+  return Buffer.get(bufnr)
+end
+
+function Buffer.load(self, line)
+  vim.validate({line = {line, "string", true}})
+
+  local lines = self._handler:histories()
+  table.insert(lines, line or "")
+  vim.api.nvim_buf_set_lines(self._bufnr, 0, -1, false, lines)
+
+  vim.bo[self._bufnr].filetype = self._handler.filetype
+end
+
+function Buffer.execute(self, row, quit)
+  vim.validate({row = {row, "number"}, quit = {quit, "boolean", true}})
+
+  local line = vim.api.nvim_buf_get_lines(self._bufnr, row - 1, row, false)[1]
+  self._handler:add_history(line)
+
+  if quit then
+    self:close()
+  end
+
+  return self._handler:execute(line)
+end
+
+function Buffer.delete_range(self, s, e)
+  vim.validate({s = {s, "number"}, e = {e, "number"}})
+  local lines = vim.api.nvim_buf_get_lines(self._bufnr, s, e, false)
+  self._handler:delete_histories(lines)
+  vim.api.nvim_buf_set_lines(self._bufnr, s, e, false, {})
 end
 
 function Buffer.close()

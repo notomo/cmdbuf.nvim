@@ -1,5 +1,6 @@
-local Layout = require("cmdbuf.layout").Layout
 local Buffer = require("cmdbuf.buffer").Buffer
+local Layout = require("cmdbuf.layout").Layout
+local Handler = require("cmdbuf.handler").Handler
 local messagelib = require("cmdbuf.lib.message")
 local vim = vim
 
@@ -18,6 +19,8 @@ function Command.new(name, ...)
   local ok, msg = xpcall(f, debug.traceback)
   if not ok then
     return messagelib.error(msg)
+  elseif msg then
+    return messagelib.warn(msg)
   end
 end
 
@@ -25,33 +28,22 @@ function Command.open(layout_opts, opts)
   vim.validate({layout_opts = {layout_opts, "table"}, opts = {opts, "table", true}})
   opts = opts or {}
 
+  local typ = opts.type or "vim/cmd"
+  local handler, err = Handler.new(typ)
+  if err ~= nil then
+    return err
+  end
+
   local layout = Layout.new(layout_opts)
-  Buffer.open(layout, opts.line, opts.column)
+  return Buffer.open(handler, layout, opts.line, opts.column)
 end
 
 function Command.execute(opts)
   vim.validate({opts = {opts, "table", true}})
   opts = opts or {}
 
-  local line = vim.api.nvim_get_current_line()
-  vim.fn.histadd("cmd", line)
-
-  if opts.quit then
-    Buffer.close()
-  end
-
-  local ok, result = pcall(vim.cmd, line)
-  if not ok then
-    local msg = result
-    if vim.startswith(msg, "Vim(echoerr)") then
-      msg = msg:sub(#("Vim:(echoerr)") + 1)
-    elseif vim.startswith(msg, "Vim:") then
-      msg = msg:sub(#("Vim:") + 1)
-    end
-
-    vim.api.nvim_echo({{msg, "ErrorMsg"}}, true, {})
-    vim.v.errmsg = msg
-  end
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+  return Buffer.current():execute(row, opts.quit)
 end
 
 function Command.delete(range)
@@ -70,15 +62,11 @@ function Command.delete(range)
     e = range[2]
   end
 
-  local lines = vim.api.nvim_buf_get_lines(0, s, e, false)
-  for _, line in ipairs(lines) do
-    vim.fn.histdel("cmd", ("^%s$"):format(vim.fn.escape(line, "[]\\*")))
-  end
-  vim.api.nvim_buf_set_lines(0, s, e, false, {})
+  return Buffer.current():delete_range(s, e)
 end
 
 function Command.reload(bufnr)
-  Buffer.load(bufnr)
+  return Buffer.get(bufnr):load()
 end
 
 return M

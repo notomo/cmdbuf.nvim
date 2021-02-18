@@ -37,17 +37,7 @@ CmdbufNew                                              *cmdbuf.nvim-CmdbufNew*
     {
       name = "EXAMPLES",
       body = function()
-        local f = io.open(example_path, "r")
-        local lines = {}
-        for line in f:lines() do
-          if line == "" then
-            table.insert(lines, line)
-          else
-            table.insert(lines, ("  %s"):format(line))
-          end
-        end
-        f:close()
-        return (">\n%s\n<"):format(table.concat(lines, "\n"))
+        return require("genvdoc.util").help_code_block_from_file(example_path)
       end,
     },
   },

@@ -24,6 +24,7 @@ function M.after_each()
   vim.cmd("silent %bwipeout!")
   vim.cmd("filetype off")
   vim.cmd("syntax off")
+  print(" ")
 end
 
 function M.set_lines(lines)
