@@ -189,4 +189,14 @@ history2]])
     assert.exists_pattern("ranged_delete_cmd4")
   end)
 
+  it("can reopen after wipeout", function()
+    vim.fn.histadd("cmd", "can_reopen")
+
+    require("cmdbuf").vsplit_open()
+    vim.cmd("bwipeout")
+    require("cmdbuf").vsplit_open()
+
+    assert.exists_pattern("can_reopen")
+  end)
+
 end)

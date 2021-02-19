@@ -35,6 +35,7 @@ function Command.open(layout_opts, opts)
   end
 
   local layout = Layout.new(layout_opts)
+
   return Buffer.open(handler, layout, opts.line, opts.column)
 end
 
@@ -67,6 +68,10 @@ end
 
 function Command.reload(bufnr)
   return Buffer.get(bufnr):load()
+end
+
+function Command.cleanup(bufnr)
+  return Buffer.get(bufnr):cleanup()
 end
 
 return M

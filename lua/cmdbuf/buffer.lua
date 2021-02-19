@@ -40,6 +40,7 @@ function Buffer.open(handler, layout, line, column)
     vim.api.nvim_buf_set_keymap(bufnr, "i", "<CR>", [[<ESC><Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
 
     vim.cmd(("autocmd BufReadCmd <buffer=%s> lua require('cmdbuf.command').Command.new('reload', %s)"):format(bufnr, bufnr))
+    vim.cmd(("autocmd BufWipeout <buffer=%s> lua require('cmdbuf.command').Command.new('cleanup', %s)"):format(bufnr, bufnr))
   elseif line ~= nil then
     vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, {line})
   end
@@ -110,6 +111,10 @@ function Buffer.close()
   end
 
   vim.cmd("buffer #")
+end
+
+function Buffer.cleanup(self)
+  repository:delete(self._bufnr)
 end
 
 return M
