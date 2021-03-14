@@ -10,6 +10,6 @@ augroup cmdbuf_setting
   autocmd User CmdbufNew call s:cmdbuf()
 augroup END
 function! s:cmdbuf() abort
-  nnoremap <buffer> q <Cmd>quit<CR>
+  nnoremap <nowait> <buffer> q <Cmd>quit<CR>
   nnoremap <buffer> dd <Cmd>lua require('cmdbuf').delete()<CR>
 endfunction
