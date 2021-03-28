@@ -7,39 +7,39 @@ open({opts})                                                   *cmdbuf.open()*
   Open a command buffer.
 
   Parameters: ~
-    {opts} (optional) |cmdbuf.nvim-open-opts|
+    {opts} (table|nil) |cmdbuf.nvim-open-opts|
 
 split_open({height}, {opts})                             *cmdbuf.split_open()*
   Open a command buffer with `split`.
 
   Parameters: ~
-    {height} (optional) window height
-    {opts} (optional) |cmdbuf.nvim-open-opts|
+    {height} (number|nil) window height
+    {opts} (table|nil) |cmdbuf.nvim-open-opts|
 
 vsplit_open({width}, {opts})                            *cmdbuf.vsplit_open()*
   Open a command buffer with `vsplit`.
 
   Parameters: ~
-    {width} (optional) window width
-    {opts} (optional) |cmdbuf.nvim-open-opts|
+    {width} (number|nil) window width
+    {opts} (table|nil) |cmdbuf.nvim-open-opts|
 
 tab_open({opts})                                           *cmdbuf.tab_open()*
   Open a command buffer in new tab.
 
   Parameters: ~
-    {opts} (optional) |cmdbuf.nvim-open-opts|
+    {opts} (table|nil) |cmdbuf.nvim-open-opts|
 
 execute({opts})                                             *cmdbuf.execute()*
   Execute the current line command.
 
   Parameters: ~
-    {opts} (optional) |cmdbuf.nvim-execute-opts|
+    {opts} (table|nil) |cmdbuf.nvim-open-opts|
 
 delete({range})                                              *cmdbuf.delete()*
   Delete current line (or given range) from command history
 
   Parameters: ~
-    {range} (optional) 1-based range {start number, end number}
+    {range} (table|nil) 1-based range {start number, end number}
 
 ==============================================================================
 OPTIONS                                                  *cmdbuf.nvim-OPTIONS*
