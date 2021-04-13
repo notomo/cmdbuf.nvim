@@ -1,4 +1,9 @@
-local example_path = "./spec/example.vim"
+local example_path = "./spec/lua/cmdbuf/example.vim"
+
+local ok, result = pcall(vim.cmd, "source" .. example_path)
+if not ok then
+  error(result)
+end
 
 require("genvdoc").generate("cmdbuf.nvim", {
   chapters = {

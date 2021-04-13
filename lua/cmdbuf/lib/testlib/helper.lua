@@ -2,14 +2,12 @@ local M = {}
 
 M.root = require("cmdbuf.lib.path").find_root()
 
-function M.command(cmd)
-  local _, err = pcall(vim.cmd, cmd)
-  if err then
-    local info = debug.getinfo(2)
-    local pos = ("%s:%d"):format(info.source, info.currentline)
-    local msg = ("on %s: failed excmd `%s`\n%s"):format(pos, cmd, err)
-    error(msg)
-  end
+function M.require(name)
+  return setmetatable({}, {
+    __index = function(_, k)
+      return require(name)[k]
+    end,
+  })
 end
 
 function M.before_each()
@@ -47,8 +45,7 @@ function M.search(pattern)
   return result
 end
 
-local vassert = require("vusted.assert")
-local asserts = vassert.asserts
+local asserts = require("vusted.assert").asserts
 
 asserts.create("filetype"):register_eq(function()
   return vim.bo.filetype
