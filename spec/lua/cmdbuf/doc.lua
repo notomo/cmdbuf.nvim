@@ -1,4 +1,5 @@
 local example_path = "./spec/lua/cmdbuf/example.vim"
+local util = require("genvdoc.util")
 
 local ok, result = pcall(vim.cmd, "source" .. example_path)
 if not ok then
@@ -20,15 +21,16 @@ require("genvdoc").generate("cmdbuf.nvim", {
     },
     {
       name = "OPTIONS",
-      body = function()
-        -- TODO: use doc builder
-        return [[
-For `open` function                                    *cmdbuf.nvim-open-opts*
-  - `line`: set this string to the bottom line in the buffer.
-  - `column`: initial cursor column in the buffer.
+      body = function(ctx)
+        return util.help_tagged(ctx, "|cmdbuf.open()| options", "cmdbuf.nvim-open-opts") .. [[
 
-For `execute` function                              *cmdbuf.nvim-execute-opts*
-  - `quit`: whether quit the window after execution.]]
+- {line} (number|nil): set this string to the bottom line in the buffer.
+- {column} (number|nil): initial cursor column in the buffer.
+- {type} (string|nil): handler type "vim/cmd"|"lua/cmd" (default = "vim/cmd")
+
+]] .. util.help_tagged(ctx, "|cmdbuf.execute()| options", "cmdbuf.nvim-execute-opts") .. [[
+
+- {quit} (boolean|nil) whether quit the window after execution.]]
       end,
     },
     {

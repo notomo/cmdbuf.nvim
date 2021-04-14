@@ -22,4 +22,10 @@ function! s:cmdbuf() abort
   nnoremap <nowait> <buffer> q <Cmd>quit<CR>
   nnoremap <buffer> dd <Cmd>lua require('cmdbuf').delete()<CR>
 endfunction
+
+" open lua command-line-window
+nnoremap ql <Cmd>lua require('cmdbuf').split_open(
+  \ vim.o.cmdwinheight,
+  \ {type = "lua/cmd"}
+  \ )<CR>
 ```

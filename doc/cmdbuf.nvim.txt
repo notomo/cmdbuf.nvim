@@ -44,12 +44,15 @@ delete({range})                                              *cmdbuf.delete()*
 ==============================================================================
 OPTIONS                                                  *cmdbuf.nvim-OPTIONS*
 
-For `open` function                                    *cmdbuf.nvim-open-opts*
-  - `line`: set this string to the bottom line in the buffer.
-  - `column`: initial cursor column in the buffer.
+|cmdbuf.open()| options                                *cmdbuf.nvim-open-opts*
 
-For `execute` function                              *cmdbuf.nvim-execute-opts*
-  - `quit`: whether quit the window after execution.
+- {line} (number|nil): set this string to the bottom line in the buffer.
+- {column} (number|nil): initial cursor column in the buffer.
+- {type} (string|nil): handler type "vim/cmd"|"lua/cmd" (default = "vim/cmd")
+
+|cmdbuf.execute()| options                          *cmdbuf.nvim-execute-opts*
+
+- {quit} (boolean|nil) whether quit the window after execution.
 
 ==============================================================================
 AUTOCOMMANDS                                        *cmdbuf.nvim-AUTOCOMMANDS*
@@ -76,6 +79,12 @@ EXAMPLES                                                *cmdbuf.nvim-EXAMPLES*
     nnoremap <nowait> <buffer> q <Cmd>quit<CR>
     nnoremap <buffer> dd <Cmd>lua require('cmdbuf').delete()<CR>
   endfunction
+
+  " open lua command-line-window
+  nnoremap ql <Cmd>lua require('cmdbuf').split_open(
+    \ vim.o.cmdwinheight,
+    \ {type = "lua/cmd"}
+    \ )<CR>
 <
 
 ==============================================================================
