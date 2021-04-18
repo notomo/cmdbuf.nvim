@@ -26,8 +26,9 @@ function M.execute(_, line)
   local ok, result = pcall(vim.cmd, line)
   if not ok then
     local msg = result
-    if vim.startswith(msg, "Vim(echoerr)") then
-      msg = msg:sub(#("Vim:(echoerr)") + 1)
+    local s, e = msg:find("Vim%(%S+%):")
+    if s then
+      msg = msg:sub(e + 1)
     elseif vim.startswith(msg, "Vim:") then
       msg = msg:sub(#("Vim:") + 1)
     end

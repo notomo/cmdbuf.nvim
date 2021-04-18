@@ -35,13 +35,24 @@ describe("vim/cmd handler", function()
     assert.exists_pattern([[^1tabedit$]])
   end)
 
-  it("shows a raw command error", function()
+  it("shows a raw `Vim:` error", function()
     cmdbuf.open()
     helper.set_lines([[invalid_test_cmd]])
 
     cmdbuf.execute({quit = true})
 
     assert.exists_message("E492: Not an editor command: invalid_test_cmd")
+  end)
+
+  it("shows a raw `Vim(cmdname):` error", function()
+    vim.bo.modifiable = false
+
+    cmdbuf.split_open()
+    helper.set_lines([[append]])
+
+    cmdbuf.execute({quit = true})
+
+    assert.exists_message("E21: Cannot make changes, 'modifiable' is off")
   end)
 
   it("can delete a command from history", function()

@@ -7,7 +7,7 @@ function M.error(err)
   error(prefix .. err)
 end
 
-M.warn = function(msg)
+function M.warn(msg)
   vim.validate({msg = {msg, "string"}})
   vim.api.nvim_echo({{prefix .. msg, "WarningMsg"}}, true, {})
 end
