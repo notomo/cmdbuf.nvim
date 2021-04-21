@@ -1,17 +1,9 @@
-local M = {}
+local plugin_name = vim.split((...):gsub("%.", "/"), "/", true)[1]
+local M = require("vusted.helper")
 
-M.root = require("cmdbuf.lib.path").find_root()
-
-function M.require(name)
-  return setmetatable({}, {
-    __index = function(_, k)
-      return require(name)[k]
-    end,
-  })
-end
+M.root = M.find_plugin_root(plugin_name)
 
 function M.before_each()
-  require("cmdbuf.lib.cleanup")()
   vim.cmd("filetype on")
   vim.cmd("syntax enable")
 end
@@ -22,6 +14,7 @@ function M.after_each()
   vim.cmd("silent %bwipeout!")
   vim.cmd("filetype off")
   vim.cmd("syntax off")
+  M.cleanup_loaded_modules(plugin_name)
   print(" ")
 end
 
