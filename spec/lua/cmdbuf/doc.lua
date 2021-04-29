@@ -26,7 +26,11 @@ require("genvdoc").generate("cmdbuf.nvim", {
 
 - {line} (number|nil): set this string to the bottom line in the buffer.
 - {column} (number|nil): initial cursor column in the buffer.
-- {type} (string|nil): handler type "vim/cmd"|"lua/cmd" (default = "vim/cmd")
+- {type} (string|nil): handler type (default = "vim/cmd")
+  - `vim/cmd`: |q:| alternative
+  - `vim/sesarch/next`: |q/| alternative
+  - `vim/sesarch/previous`: |q?| alternative
+  - `lua/cmd`: |q:| alternative for lua command
 
 ]] .. util.help_tagged(ctx, "|cmdbuf.execute()| options", "cmdbuf.nvim-execute-opts") .. [[
 

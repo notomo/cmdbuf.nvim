@@ -72,6 +72,10 @@ asserts.create("current_row"):register_eq(function()
   return vim.fn.line(".")
 end)
 
+asserts.create("current_word"):register_eq(function()
+  return vim.fn.expand("<cword>")
+end)
+
 asserts.create("exists_pattern"):register(function(self)
   return function(_, args)
     local pattern = args[1]
