@@ -50,8 +50,8 @@ OPTIONS                                                  *cmdbuf.nvim-OPTIONS*
 - {column} (number|nil): initial cursor column in the buffer.
 - {type} (string|nil): handler type (default = "vim/cmd")
   - `vim/cmd`: |q:| alternative
-  - `vim/sesarch/next`: |q/| alternative
-  - `vim/sesarch/previous`: |q?| alternative
+  - `vim/sesarch/forward`: |q/| alternative
+  - `vim/sesarch/backward`: |q?| alternative
   - `lua/cmd`: |q:| alternative for lua command
 
 |cmdbuf.execute()| options                          *cmdbuf.nvim-execute-opts*
@@ -93,11 +93,11 @@ EXAMPLES                                                *cmdbuf.nvim-EXAMPLES*
   " q/, q? alternative
   nnoremap q/ <Cmd>lua require('cmdbuf').split_open(
     \ vim.o.cmdwinheight,
-    \ {type = "vim/search/next"}
+    \ {type = "vim/search/forward"}
     \ )<CR>
   nnoremap q? <Cmd>lua require('cmdbuf').split_open(
     \ vim.o.cmdwinheight,
-    \ {type = "vim/search/previous"}
+    \ {type = "vim/search/backward"}
     \ )<CR>
 <
 

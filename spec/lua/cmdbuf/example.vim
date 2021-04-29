@@ -23,9 +23,9 @@ nnoremap ql <Cmd>lua require('cmdbuf').split_open(
 " q/, q? alternative
 nnoremap q/ <Cmd>lua require('cmdbuf').split_open(
   \ vim.o.cmdwinheight,
-  \ {type = "vim/search/next"}
+  \ {type = "vim/search/forward"}
   \ )<CR>
 nnoremap q? <Cmd>lua require('cmdbuf').split_open(
   \ vim.o.cmdwinheight,
-  \ {type = "vim/search/previous"}
+  \ {type = "vim/search/backward"}
   \ )<CR>
