@@ -1,3 +1,5 @@
+local historylib = require("cmdbuf.lib.history")
+
 local M = {}
 
 function M._lua(cmd)
@@ -23,7 +25,7 @@ end
 
 function M.delete_histories(self, lines)
   for _, line in ipairs(lines) do
-    vim.fn.histdel("cmd", ("^%s$"):format(vim.fn.escape(self._lua(line), "[]\\*")))
+    historylib.delete("cmd", self._lua(line))
   end
 end
 
