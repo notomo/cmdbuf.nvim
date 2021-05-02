@@ -64,7 +64,11 @@ local gen_readme = function()
 
 [![ci](https://github.com/notomo/cmdbuf.nvim/workflows/ci/badge.svg?branch=main)](https://github.com/notomo/cmdbuf.nvim/actions?query=workflow%%3Aci+branch%%3Amain)
 
-Alternative command-line-window plugin
+The builtin command-line window is a special window.
+For example, you cannot leave it by `wincmd`.
+This plugin provides command-line window functions by normal buffer and window.
+
+<img src="https://raw.github.com/wiki/notomo/cmdbuf.nvim/image/demo.gif" width="1280">
 
 ## Example
 
