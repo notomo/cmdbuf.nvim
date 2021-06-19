@@ -3,15 +3,12 @@ local historylib = require("cmdbuf.lib.history")
 local M = {}
 
 function M.histories()
-  local count = vim.fn.histnr("cmd")
-  local cmds = {}
-  for i = 1, count, 1 do
-    local cmd = vim.fn.histget("cmd", i)
-    if cmd ~= "" then
-      table.insert(cmds, cmd)
+  return historylib.filter_map("cmd", function(cmd)
+    if cmd == "" then
+      return nil
     end
-  end
-  return cmds
+    return cmd
+  end)
 end
 
 function M.add_history(_, line)

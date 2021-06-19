@@ -6,15 +6,12 @@ M.flags = ""
 M.searchforward = 1
 
 function M.histories()
-  local count = vim.fn.histnr("search")
-  local cmds = {}
-  for i = 1, count, 1 do
-    local cmd = vim.fn.histget("search", i)
-    if cmd ~= "" then
-      table.insert(cmds, cmd)
+  return historylib.filter_map("search", function(cmd)
+    if cmd == "" then
+      return nil
     end
-  end
-  return cmds
+    return cmd
+  end)
 end
 
 function M.add_history(_, line)

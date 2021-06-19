@@ -7,16 +7,13 @@ function M._lua(cmd)
 end
 
 function M.histories()
-  local count = vim.fn.histnr("cmd")
-  local cmds = {}
-  for i = 1, count, 1 do
-    local cmd = vim.fn.histget("cmd", i)
+  return historylib.filter_map("cmd", function(cmd)
     local s, e = cmd:find("^%s*lua%s+")
-    if s then
-      table.insert(cmds, cmd:sub(e + 1))
+    if not s then
+      return nil
     end
-  end
-  return cmds
+    return cmd:sub(e + 1)
+  end)
 end
 
 function M.add_history(self, line)
