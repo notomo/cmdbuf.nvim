@@ -94,6 +94,9 @@ function Buffer.execute(self, row, quit)
     self:close()
   end
 
+  if line == "" then
+    return nil
+  end
   return self._handler:execute(line)
 end
 

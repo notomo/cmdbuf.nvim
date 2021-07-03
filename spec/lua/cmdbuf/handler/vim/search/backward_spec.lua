@@ -58,4 +58,11 @@ describe("vim/search/backward handler", function()
     assert.no.exists_pattern("delete_search_backward")
   end)
 
+  it("does not raise error even if command is empty line", function()
+    cmdbuf.open({type = "vim/search/backward"})
+    cmdbuf.execute()
+
+    assert.window_count(1)
+  end)
+
 end)
