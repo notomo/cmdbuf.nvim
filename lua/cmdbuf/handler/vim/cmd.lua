@@ -1,4 +1,5 @@
 local historylib = require("cmdbuf.lib.history")
+local messagelib = require("cmdbuf.lib.message")
 
 local M = {}
 
@@ -24,16 +25,7 @@ end
 function M.execute(_, line)
   local ok, result = pcall(vim.cmd, line)
   if not ok then
-    local msg = result
-    local s, e = msg:find("Vim%(%S+%):")
-    if s then
-      msg = msg:sub(e + 1)
-    elseif vim.startswith(msg, "Vim:") then
-      msg = msg:sub(#("Vim:") + 1)
-    end
-
-    vim.api.nvim_echo({{msg, "ErrorMsg"}}, true, {})
-    vim.v.errmsg = msg
+    return messagelib.user_vim_error(result)
   end
 end
 

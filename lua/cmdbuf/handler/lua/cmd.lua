@@ -1,4 +1,5 @@
 local historylib = require("cmdbuf.lib.history")
+local messagelib = require("cmdbuf.lib.message")
 
 local M = {}
 
@@ -34,8 +35,7 @@ function M.execute(self, line)
       msg = msg:sub(#("Vim(lua):") + 1)
     end
 
-    vim.api.nvim_echo({{msg, "ErrorMsg"}}, true, {})
-    vim.v.errmsg = msg
+    messagelib.user_error(msg)
   end
 end
 
