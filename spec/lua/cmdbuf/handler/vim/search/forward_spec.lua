@@ -46,6 +46,15 @@ describe("vim/search/forward handler", function()
     assert.exists_message("E486: Pattern not found: invalid_search_forward")
   end)
 
+  it("shows a raw regexp error", function()
+    cmdbuf.open({type = "vim/search/forward"})
+    helper.set_lines([[\z]])
+
+    cmdbuf.execute({quit = true})
+
+    assert.exists_message([[^E867: %(NFA%) Unknown operator]])
+  end)
+
   it("can delete a command from history", function()
     vim.fn.histadd("search", "delete_search_forward")
 

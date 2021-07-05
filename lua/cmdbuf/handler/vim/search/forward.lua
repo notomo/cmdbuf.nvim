@@ -1,4 +1,5 @@
 local historylib = require("cmdbuf.lib.history")
+local messagelib = require("cmdbuf.lib.message")
 
 local M = {}
 
@@ -28,11 +29,12 @@ function M.execute(self, line)
   vim.fn.setreg("/", line)
   vim.cmd("let &hlsearch = 1")
   vim.cmd("let v:searchforward = " .. self.searchforward)
-  local result = vim.fn.search(line, self.flags)
+  local ok, result = pcall(vim.fn.search, line, self.flags)
+  if not ok then
+    return messagelib.user_vim_error(result)
+  end
   if result == 0 then
-    local msg = "E486: Pattern not found: " .. line
-    vim.api.nvim_echo({{msg, "ErrorMsg"}}, true, {})
-    vim.v.errmsg = msg
+    return messagelib.user_error("E486: Pattern not found: " .. line)
   end
 end
 
