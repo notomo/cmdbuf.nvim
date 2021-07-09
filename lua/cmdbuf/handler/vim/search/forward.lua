@@ -27,7 +27,7 @@ end
 
 function M.execute(self, line)
   vim.fn.setreg("/", line)
-  vim.cmd("let &hlsearch = 1")
+  vim.cmd("let &hlsearch = &hlsearch")
   vim.cmd("let v:searchforward = " .. self.searchforward)
   local ok, result = pcall(vim.fn.search, line, self.flags)
   if not ok then
