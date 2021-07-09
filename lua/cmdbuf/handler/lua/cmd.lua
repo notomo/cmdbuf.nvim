@@ -28,14 +28,9 @@ function M.delete_histories(self, lines)
 end
 
 function M.execute(self, line)
-  local ok, result = pcall(vim.cmd, self._lua(line))
+  local ok, msg = pcall(vim.cmd, self._lua(line))
   if not ok then
-    local msg = result
-    if vim.startswith(msg, "Vim(lua):") then
-      msg = msg:sub(#("Vim(lua):") + 1)
-    end
-
-    messagelib.user_error(msg)
+    return messagelib.user_vim_error(msg)
   end
 end
 
