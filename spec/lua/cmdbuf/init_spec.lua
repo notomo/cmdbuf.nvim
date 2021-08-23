@@ -9,11 +9,20 @@ describe("cmdbuf.nvim", function()
   it("can open with split", function()
     local origin = vim.api.nvim_get_current_buf()
 
+    local origin_win1 = vim.api.nvim_get_current_win()
+    vim.cmd("vsplit")
+    local origin_win2 = vim.api.nvim_get_current_win()
+
     cmdbuf.split_open()
 
     vim.cmd("wincmd k")
     assert.bufnr(origin)
 
+    vim.api.nvim_set_current_win(origin_win1)
+    vim.cmd("wincmd j")
+    assert.buffer("cmdbuf://vim/cmd-buffer")
+
+    vim.api.nvim_set_current_win(origin_win2)
     vim.cmd("wincmd j")
     assert.buffer("cmdbuf://vim/cmd-buffer")
   end)

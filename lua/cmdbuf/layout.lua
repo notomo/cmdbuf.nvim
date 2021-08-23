@@ -19,7 +19,7 @@ end
 function Layouts.split(height)
   vim.validate({height = {height, "number", true}})
   return function()
-    vim.cmd("split")
+    vim.cmd("botright split")
     vim.cmd("wincmd j")
     if height ~= nil then
       vim.api.nvim_win_set_height(0, height)
