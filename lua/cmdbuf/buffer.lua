@@ -26,7 +26,11 @@ function Buffer.open(handler, layout, line, column)
   if not already_created then
     bufnr = vim.api.nvim_create_buf(false, true)
 
-    local tbl = {_bufnr = bufnr, _handler = handler}
+    local tbl = {
+      _bufnr = bufnr,
+      _handler = handler,
+      _origin_window = vim.api.nvim_get_current_win(),
+    }
     local buffer = setmetatable(tbl, Buffer)
     repository:set(bufnr, buffer)
 
@@ -117,6 +121,11 @@ function Buffer.close()
 end
 
 function Buffer.cleanup(self)
+  vim.schedule(function()
+    if vim.api.nvim_win_is_valid(self._origin_window) then
+      vim.api.nvim_set_current_win(self._origin_window)
+    end
+  end)
   repository:delete(self._bufnr)
 end
 

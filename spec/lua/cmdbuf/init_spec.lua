@@ -169,4 +169,20 @@ history2]])
     assert.exists_pattern("can_reopen")
   end)
 
+  it("restores current window on wiped", function()
+    vim.cmd("vsplit")
+    vim.cmd("wincmd w")
+    local origin_win = vim.api.nvim_get_current_win()
+
+    cmdbuf.split_open()
+    vim.cmd("bwipeout")
+
+    -- wait vim.schedule
+    vim.wait(100, function()
+      return false
+    end, 10, false)
+
+    assert.window(origin_win)
+  end)
+
 end)

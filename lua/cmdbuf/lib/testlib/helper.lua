@@ -52,6 +52,10 @@ asserts.create("bufnr"):register_eq(function()
   return vim.api.nvim_get_current_buf()
 end)
 
+asserts.create("window"):register_eq(function()
+  return vim.api.nvim_get_current_win()
+end)
+
 asserts.create("tab_count"):register_eq(function()
   return vim.fn.tabpagenr("$")
 end)
