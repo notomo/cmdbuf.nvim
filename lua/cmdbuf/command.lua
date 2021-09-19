@@ -70,6 +70,10 @@ function Command.reload(bufnr)
   return Buffer.get(bufnr):load()
 end
 
+function Command.on_win_closed(bufnr)
+  return Buffer.get(bufnr):on_win_closed()
+end
+
 function Command.cleanup(bufnr)
   return Buffer.get(bufnr):cleanup()
 end

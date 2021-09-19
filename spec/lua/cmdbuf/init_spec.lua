@@ -169,20 +169,40 @@ history2]])
     assert.exists_pattern("can_reopen")
   end)
 
-  it("restores current window on wiped", function()
+  it("restores current window on closed", function()
     vim.cmd("vsplit")
     vim.cmd("wincmd w")
     local origin_win = vim.api.nvim_get_current_win()
 
     cmdbuf.split_open()
-    vim.cmd("bwipeout")
-
-    -- wait vim.schedule
-    vim.wait(100, function()
-      return false
-    end, 10, false)
+    vim.cmd("quit")
 
     assert.window(origin_win)
+  end)
+
+  it("restores current window on executed", function()
+    vim.cmd("vsplit")
+    vim.cmd("wincmd w")
+    local origin_win = vim.api.nvim_get_current_win()
+
+    cmdbuf.split_open()
+    helper.set_lines([[echomsg]])
+    cmdbuf.execute({quit = true})
+
+    assert.window(origin_win)
+  end)
+
+  it("works wincmd", function()
+    vim.cmd("vsplit")
+    vim.cmd("wincmd w")
+    local target_win = vim.api.nvim_get_current_win()
+    vim.cmd("wincmd p")
+
+    cmdbuf.split_open()
+    helper.set_lines([[wincmd w]])
+    cmdbuf.execute({quit = true})
+
+    assert.window(target_win)
   end)
 
 end)

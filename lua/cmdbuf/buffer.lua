@@ -44,6 +44,7 @@ function Buffer.open(handler, layout, line, column)
     vim.api.nvim_buf_set_keymap(bufnr, "i", "<CR>", [[<ESC><Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
 
     vim.cmd(("autocmd BufReadCmd <buffer=%s> lua require('cmdbuf.command').Command.new('reload', %s)"):format(bufnr, bufnr))
+    vim.cmd(("autocmd WinClosed <buffer=%s> lua require('cmdbuf.command').Command.new('on_win_closed', %s)"):format(bufnr, bufnr))
     vim.cmd(("autocmd BufWipeout <buffer=%s> lua require('cmdbuf.command').Command.new('cleanup', %s)"):format(bufnr, bufnr))
   elseif line ~= nil then
     vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, {line})
@@ -111,22 +112,28 @@ function Buffer.delete_range(self, s, e)
   vim.api.nvim_buf_set_lines(self._bufnr, s, e, false, {})
 end
 
-function Buffer.close()
+function Buffer.close(self)
   local win_count = #vim.api.nvim_tabpage_list_wins(0)
   if win_count > 1 then
-    return vim.api.nvim_win_close(0, true)
+    local window_id = vim.api.nvim_get_current_win()
+    if vim.api.nvim_win_is_valid(self._origin_window) then
+      vim.api.nvim_set_current_win(self._origin_window)
+    end
+    vim.api.nvim_win_close(window_id, true)
+    return
   end
 
   vim.cmd("buffer #")
 end
 
 function Buffer.cleanup(self)
-  vim.schedule(function()
-    if vim.api.nvim_win_is_valid(self._origin_window) then
-      vim.api.nvim_set_current_win(self._origin_window)
-    end
-  end)
   repository:delete(self._bufnr)
+end
+
+function Buffer.on_win_closed(self)
+  if vim.api.nvim_win_is_valid(self._origin_window) then
+    vim.api.nvim_set_current_win(self._origin_window)
+  end
 end
 
 return M
