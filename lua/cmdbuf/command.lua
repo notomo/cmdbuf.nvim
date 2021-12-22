@@ -1,4 +1,5 @@
 local Buffer = require("cmdbuf.buffer").Buffer
+local Window = require("cmdbuf.window").Window
 local Layout = require("cmdbuf.layout").Layout
 local Handler = require("cmdbuf.handler").Handler
 local messagelib = require("cmdbuf.lib.message")
@@ -34,36 +35,19 @@ function Command.open(layout_opts, opts)
     return err
   end
 
+  local buffer = Buffer.get_or_create(handler, opts.line)
   local layout = Layout.new(layout_opts)
-
-  return Buffer.open(handler, layout, opts.line, opts.column)
+  buffer:open(layout, opts.line, opts.column)
 end
 
 function Command.execute(opts)
   vim.validate({opts = {opts, "table", true}})
   opts = opts or {}
-
-  local row = vim.api.nvim_win_get_cursor(0)[1]
-  return Buffer.current():execute(row, opts.quit)
+  return Window.current():execute(opts.quit)
 end
 
 function Command.delete(range)
-  vim.validate({range = {range, "table", true}})
-
-  local s, e
-  if not range then
-    local row = vim.api.nvim_win_get_cursor(0)[1]
-    s = row - 1
-    e = row
-  end
-
-  if range then
-    vim.validate({["range[1]"] = {range[1], "number"}, ["range[2]"] = {range[2], "number"}})
-    s = range[1] - 1
-    e = range[2]
-  end
-
-  return Buffer.current():delete_range(s, e)
+  return Window.current():delete_range(range)
 end
 
 function Command.reload(bufnr)

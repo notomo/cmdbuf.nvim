@@ -7,62 +7,40 @@ local Buffer = {}
 Buffer.__index = Buffer
 M.Buffer = Buffer
 
-function Buffer.open(handler, layout, line, column)
-  vim.validate({
-    handler = {handler, "table"},
-    layout = {layout, "table"},
-    line = {line, "string", true},
-    column = {column, "number", true},
-  })
-
+function Buffer.get_or_create(handler, line)
   local name = ("cmdbuf://%s-buffer"):format(handler.name)
   local bufnr = vim.fn.bufnr(("^%s$"):format(name))
   local already_created = bufnr ~= -1
-  if already_created then
-    -- NOTE: the buffer is empty if it was closed by `:quit!`
-    vim.fn.bufload(bufnr)
+  if not already_created then
+    return Buffer.create(handler, name, line)
   end
 
-  if not already_created then
-    bufnr = vim.api.nvim_create_buf(false, true)
+  -- NOTE: the buffer is empty if it was closed by `:quit!`
+  vim.fn.bufload(bufnr)
 
-    local tbl = {
-      _bufnr = bufnr,
-      _handler = handler,
-      _origin_window = vim.api.nvim_get_current_win(),
-    }
-    local buffer = setmetatable(tbl, Buffer)
-    repository:set(bufnr, buffer)
-
-    local err = buffer:load(line)
-    if err ~= nil then
-      return err
-    end
-    vim.api.nvim_buf_set_name(bufnr, name)
-
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<CR>", [[<Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
-    vim.api.nvim_buf_set_keymap(bufnr, "i", "<CR>", [[<ESC><Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
-
-    vim.cmd(("autocmd BufReadCmd <buffer=%s> lua require('cmdbuf.command').Command.new('reload', %s)"):format(bufnr, bufnr))
-    vim.cmd(("autocmd WinClosed <buffer=%s> lua require('cmdbuf.command').Command.new('on_win_closed', %s)"):format(bufnr, bufnr))
-    vim.cmd(("autocmd BufWipeout <buffer=%s> lua require('cmdbuf.command').Command.new('cleanup', %s)"):format(bufnr, bufnr))
-  elseif line ~= nil then
+  if line then
     vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, {line})
   end
+  return Buffer.get(bufnr)
+end
 
-  layout:open(bufnr)
+function Buffer.create(handler, name, line)
+  local bufnr = vim.api.nvim_create_buf(false, true)
+  local tbl = {_bufnr = bufnr, _handler = handler, _origin_window = vim.api.nvim_get_current_win()}
+  local self = setmetatable(tbl, Buffer)
+  repository:set(bufnr, self)
 
-  if not already_created then
-    cursorlib.to_bottom(bufnr)
-    vim.cmd("doautocmd <nomodeline> BufRead") -- HACK?
-    vim.cmd("doautocmd <nomodeline> User CmdbufNew")
-  elseif line ~= nil then
-    cursorlib.to_bottom(bufnr)
-  end
+  self:load(line)
 
-  if column ~= nil then
-    cursorlib.set_column(column)
-  end
+  vim.api.nvim_buf_set_name(bufnr, name)
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<CR>", [[<Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
+  vim.api.nvim_buf_set_keymap(bufnr, "i", "<CR>", [[<ESC><Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
+
+  vim.cmd(("autocmd BufReadCmd <buffer=%s> lua require('cmdbuf.command').Command.new('reload', %s)"):format(bufnr, bufnr))
+  vim.cmd(("autocmd WinClosed <buffer=%s> lua require('cmdbuf.command').Command.new('on_win_closed', %s)"):format(bufnr, bufnr))
+  vim.cmd(("autocmd BufWipeout <buffer=%s> lua require('cmdbuf.command').Command.new('cleanup', %s)"):format(bufnr, bufnr))
+
+  return self
 end
 
 function Buffer.get(bufnr)
@@ -79,6 +57,23 @@ function Buffer.current()
   return Buffer.get(bufnr)
 end
 
+function Buffer.open(self, layout, line, column)
+  local created = #vim.fn.win_findbuf(self._bufnr) == 0
+
+  layout:open(self._bufnr)
+
+  if created then
+    cursorlib.to_bottom(self._bufnr)
+    vim.cmd("doautocmd <nomodeline> BufRead") -- HACK?
+    vim.cmd("doautocmd <nomodeline> User CmdbufNew")
+  elseif line ~= nil then
+    cursorlib.to_bottom(self._bufnr)
+  end
+  if column ~= nil then
+    cursorlib.set_column(column)
+  end
+end
+
 function Buffer.load(self, line)
   vim.validate({line = {line, "string", true}})
 
@@ -89,15 +84,13 @@ function Buffer.load(self, line)
   vim.bo[self._bufnr].filetype = self._handler.filetype
 end
 
-function Buffer.execute(self, row, quit)
-  vim.validate({row = {row, "number"}, quit = {quit, "boolean", true}})
+function Buffer.execute(self, row, close_window)
+  vim.validate({row = {row, "number"}, close_window = {close_window, "function"}})
 
   local line = vim.api.nvim_buf_get_lines(self._bufnr, row - 1, row, false)[1]
   self._handler:add_history(line)
 
-  if quit then
-    self:close()
-  end
+  close_window()
 
   if line == "" then
     return nil
@@ -110,20 +103,6 @@ function Buffer.delete_range(self, s, e)
   local lines = vim.api.nvim_buf_get_lines(self._bufnr, s, e, false)
   self._handler:delete_histories(lines)
   vim.api.nvim_buf_set_lines(self._bufnr, s, e, false, {})
-end
-
-function Buffer.close(self)
-  local win_count = #vim.api.nvim_tabpage_list_wins(0)
-  if win_count > 1 then
-    local window_id = vim.api.nvim_get_current_win()
-    if vim.api.nvim_win_is_valid(self._origin_window) then
-      vim.api.nvim_set_current_win(self._origin_window)
-    end
-    vim.api.nvim_win_close(window_id, true)
-    return
-  end
-
-  vim.cmd("buffer #")
 end
 
 function Buffer.cleanup(self)
