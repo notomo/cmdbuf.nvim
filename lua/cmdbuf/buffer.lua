@@ -1,4 +1,5 @@
-local repository = require("cmdbuf.lib.repository").Repository.new("handler")
+local buffer_repository = require("cmdbuf.lib.repository").Repository.new("buffer")
+local window_id_repository = require("cmdbuf.lib.repository").Repository.new("window_id")
 local cursorlib = require("cmdbuf.lib.cursor")
 
 local M = {}
@@ -26,9 +27,9 @@ end
 
 function Buffer.create(handler, name, line)
   local bufnr = vim.api.nvim_create_buf(false, true)
-  local tbl = {_bufnr = bufnr, _handler = handler, _origin_window = vim.api.nvim_get_current_win()}
+  local tbl = {_bufnr = bufnr, _handler = handler}
   local self = setmetatable(tbl, Buffer)
-  repository:set(bufnr, self)
+  buffer_repository:set(bufnr, self)
 
   self:load(line)
 
@@ -37,7 +38,7 @@ function Buffer.create(handler, name, line)
   vim.api.nvim_buf_set_keymap(bufnr, "i", "<CR>", [[<ESC><Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
 
   vim.cmd(("autocmd BufReadCmd <buffer=%s> lua require('cmdbuf.command').Command.new('reload', %s)"):format(bufnr, bufnr))
-  vim.cmd(("autocmd WinClosed <buffer=%s> lua require('cmdbuf.command').Command.new('on_win_closed', %s)"):format(bufnr, bufnr))
+  vim.cmd(("autocmd WinClosed <buffer=%s> lua require('cmdbuf.command').Command.new('on_win_closed', tonumber(vim.fn.expand('<afile>')))"):format(bufnr))
   vim.cmd(("autocmd BufWipeout <buffer=%s> lua require('cmdbuf.command').Command.new('cleanup', %s)"):format(bufnr, bufnr))
 
   return self
@@ -45,7 +46,7 @@ end
 
 function Buffer.get(bufnr)
   vim.validate({bufnr = {bufnr, "number"}})
-  local buffer = repository:get(bufnr)
+  local buffer = buffer_repository:get(bufnr)
   if buffer == nil then
     error(("state is not found in buffer: %s"):format(bufnr))
   end
@@ -60,7 +61,9 @@ end
 function Buffer.open(self, layout, line, column)
   local created = #vim.fn.win_findbuf(self._bufnr) == 0
 
+  local origin_window_id = vim.api.nvim_get_current_win()
   layout:open(self._bufnr)
+  window_id_repository:set(vim.api.nvim_get_current_win(), origin_window_id)
 
   if created then
     cursorlib.to_bottom(self._bufnr)
@@ -106,13 +109,7 @@ function Buffer.delete_range(self, s, e)
 end
 
 function Buffer.cleanup(self)
-  repository:delete(self._bufnr)
-end
-
-function Buffer.on_win_closed(self)
-  if vim.api.nvim_win_is_valid(self._origin_window) then
-    vim.api.nvim_set_current_win(self._origin_window)
-  end
+  buffer_repository:delete(self._bufnr)
 end
 
 return M

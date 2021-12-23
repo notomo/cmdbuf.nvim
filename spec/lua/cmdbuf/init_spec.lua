@@ -205,4 +205,18 @@ history2]])
     assert.window(target_win)
   end)
 
+  it("restores current window even if cmdbuf buffers are opened nested", function()
+    local second_restored_win = vim.api.nvim_get_current_win()
+    cmdbuf.split_open()
+
+    local first_restored_win = vim.api.nvim_get_current_win()
+    cmdbuf.split_open()
+
+    cmdbuf.execute({quit = true})
+    assert.window(first_restored_win)
+
+    cmdbuf.execute({quit = true})
+    assert.window(second_restored_win)
+  end)
+
 end)

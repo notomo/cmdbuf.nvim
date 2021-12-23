@@ -1,4 +1,5 @@
 local Buffer = require("cmdbuf.buffer").Buffer
+local window_id_repository = require("cmdbuf.lib.repository").Repository.new("window_id")
 
 local M = {}
 
@@ -8,8 +9,18 @@ M.Window = Window
 
 function Window.current()
   local window_id = vim.api.nvim_get_current_win()
+  return Window.get(window_id)
+end
+
+function Window.get(window_id)
+  vim.validate({window_id = {window_id, "number"}})
   local bufnr = vim.api.nvim_win_get_buf(window_id)
-  local tbl = {_window_id = window_id, _buffer = Buffer.get(bufnr)}
+  local origin_window_id = window_id_repository:get(window_id)
+  local tbl = {
+    _window_id = window_id,
+    _buffer = Buffer.get(bufnr),
+    _origin_window_id = origin_window_id,
+  }
   return setmetatable(tbl, Window)
 end
 
@@ -53,8 +64,15 @@ function Window.close(self)
     return vim.cmd("buffer #")
   end
 
-  self._buffer:on_win_closed()
+  self:on_closed()
   vim.api.nvim_win_close(self._window_id, true)
+end
+
+function Window.on_closed(self)
+  if vim.api.nvim_win_is_valid(self._origin_window_id) then
+    vim.api.nvim_set_current_win(self._origin_window_id)
+  end
+  window_id_repository:delete(self._window_id)
 end
 
 return M

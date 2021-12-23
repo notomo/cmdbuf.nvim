@@ -54,8 +54,8 @@ function Command.reload(bufnr)
   return Buffer.get(bufnr):load()
 end
 
-function Command.on_win_closed(bufnr)
-  return Buffer.get(bufnr):on_win_closed()
+function Command.on_win_closed(window_id)
+  return Window.get(window_id):on_closed()
 end
 
 function Command.cleanup(bufnr)
