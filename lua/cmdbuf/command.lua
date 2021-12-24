@@ -1,5 +1,5 @@
-local Buffer = require("cmdbuf.buffer").Buffer
-local Window = require("cmdbuf.window").Window
+local Buffer = require("cmdbuf.core.buffer").Buffer
+local Window = require("cmdbuf.core.window").Window
 local Layout = require("cmdbuf.layout").Layout
 local Handler = require("cmdbuf.handler").Handler
 local messagelib = require("cmdbuf.lib.message")

@@ -1,4 +1,4 @@
-local Buffer = require("cmdbuf.buffer").Buffer
+local Buffer = require("cmdbuf.core.buffer").Buffer
 local window_id_repository = require("cmdbuf.lib.repository").Repository.new("window_id")
 
 local M = {}
