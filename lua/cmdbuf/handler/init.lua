@@ -9,7 +9,7 @@ function Handler.new(typ)
   vim.validate({type = {typ, "string"}})
 
   local handler = modulelib.find("cmdbuf/handler/" .. typ)
-  if handler == nil then
+  if not handler then
     return nil, "not found handler: " .. typ
   end
 

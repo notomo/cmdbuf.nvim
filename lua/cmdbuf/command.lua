@@ -31,13 +31,13 @@ function Command.open(layout_opts, opts)
 
   local typ = opts.type or "vim/cmd"
   local handler, err = Handler.new(typ)
-  if err ~= nil then
+  if err then
     return err
   end
 
-  local buffer = Buffer.get_or_create(handler, opts.line)
+  local buffer, created = Buffer.get_or_create(handler, opts.line)
   local layout = Layout.new(layout_opts)
-  buffer:open(layout, opts.line, opts.column)
+  Window.open(buffer, created, layout, opts.line, opts.column)
 end
 
 function Command.execute(opts)

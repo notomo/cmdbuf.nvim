@@ -1,6 +1,4 @@
 local buffer_repository = require("cmdbuf.lib.repository").Repository.new("buffer")
-local window_id_repository = require("cmdbuf.lib.repository").Repository.new("window_id")
-local cursorlib = require("cmdbuf.lib.cursor")
 
 local M = {}
 
@@ -11,9 +9,8 @@ M.Buffer = Buffer
 function Buffer.get_or_create(handler, line)
   local name = ("cmdbuf://%s-buffer"):format(handler.name)
   local bufnr = vim.fn.bufnr(("^%s$"):format(name))
-  local already_created = bufnr ~= -1
-  if not already_created then
-    return Buffer.create(handler, name, line)
+  if bufnr == -1 then
+    return Buffer.create(handler, name, line), true
   end
 
   -- NOTE: the buffer is empty if it was closed by `:quit!`
@@ -22,7 +19,7 @@ function Buffer.get_or_create(handler, line)
   if line then
     vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, {line})
   end
-  return Buffer.get(bufnr)
+  return Buffer.get(bufnr), false
 end
 
 function Buffer.create(handler, name, line)
@@ -47,7 +44,7 @@ end
 function Buffer.get(bufnr)
   vim.validate({bufnr = {bufnr, "number"}})
   local buffer = buffer_repository:get(bufnr)
-  if buffer == nil then
+  if not buffer then
     error(("state is not found in buffer: %s"):format(bufnr))
   end
   return buffer
@@ -56,25 +53,6 @@ end
 function Buffer.current()
   local bufnr = vim.api.nvim_get_current_buf()
   return Buffer.get(bufnr)
-end
-
-function Buffer.open(self, layout, line, column)
-  local created = #vim.fn.win_findbuf(self._bufnr) == 0
-
-  local origin_window_id = vim.api.nvim_get_current_win()
-  layout:open(self._bufnr)
-  window_id_repository:set(vim.api.nvim_get_current_win(), origin_window_id)
-
-  if created then
-    cursorlib.to_bottom(self._bufnr)
-    vim.cmd("doautocmd <nomodeline> BufRead") -- HACK?
-    vim.cmd("doautocmd <nomodeline> User CmdbufNew")
-  elseif line ~= nil then
-    cursorlib.to_bottom(self._bufnr)
-  end
-  if column ~= nil then
-    cursorlib.set_column(column)
-  end
 end
 
 function Buffer.load(self, line)
@@ -106,6 +84,10 @@ function Buffer.delete_range(self, s, e)
   local lines = vim.api.nvim_buf_get_lines(self._bufnr, s, e, false)
   self._handler:delete_histories(lines)
   vim.api.nvim_buf_set_lines(self._bufnr, s, e, false, {})
+end
+
+function Buffer.set_to(self, window_id)
+  vim.api.nvim_win_set_buf(window_id, self._bufnr)
 end
 
 function Buffer.cleanup(self)

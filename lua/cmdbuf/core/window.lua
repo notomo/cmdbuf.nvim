@@ -1,11 +1,30 @@
 local Buffer = require("cmdbuf.core.buffer").Buffer
 local window_id_repository = require("cmdbuf.lib.repository").Repository.new("window_id")
+local cursorlib = require("cmdbuf.lib.cursor")
 
 local M = {}
 
 local Window = {}
 Window.__index = Window
 M.Window = Window
+
+function Window.open(buffer, created, layout, line, column)
+  local origin_window_id = vim.api.nvim_get_current_win()
+  local window_id = layout:open()
+  buffer:set_to(window_id)
+  window_id_repository:set(window_id, origin_window_id)
+
+  if created then
+    cursorlib.to_bottom(window_id)
+    vim.cmd("doautocmd <nomodeline> BufRead") -- HACK?
+    vim.cmd("doautocmd <nomodeline> User CmdbufNew")
+  elseif line then
+    cursorlib.to_bottom(window_id)
+  end
+  if column then
+    cursorlib.set_column(column)
+  end
+end
 
 function Window.current()
   local window_id = vim.api.nvim_get_current_win()

@@ -46,7 +46,7 @@ function Layout.new(opts)
     f = Layouts.split(opts.height)
   elseif typ == "tab" then
     f = Layouts.tab
-  elseif typ == nil then
+  elseif not typ then
     f = Layouts.no
   else
     error("unexpected layout type: " .. typ)
@@ -56,9 +56,9 @@ function Layout.new(opts)
   return setmetatable(tbl, Layout)
 end
 
-function Layout.open(self, bufnr)
+function Layout.open(self)
   self._f()
-  vim.api.nvim_win_set_buf(0, bufnr)
+  return vim.api.nvim_get_current_win()
 end
 
 return M
