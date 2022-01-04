@@ -32,7 +32,7 @@ function Window.current()
 end
 
 function Window.get(window_id)
-  vim.validate({window_id = {window_id, "number"}})
+  vim.validate({ window_id = { window_id, "number" } })
   local bufnr = vim.api.nvim_win_get_buf(window_id)
   local origin_window_id = window_id_repository:get(window_id)
   local tbl = {
@@ -46,8 +46,7 @@ end
 function Window.execute(self, quit)
   local close_window
   if not quit then
-    close_window = function()
-    end
+    close_window = function() end
   else
     close_window = function()
       self:close()
@@ -59,7 +58,7 @@ function Window.execute(self, quit)
 end
 
 function Window.delete_range(self, range)
-  vim.validate({range = {range, "table", true}})
+  vim.validate({ range = { range, "table", true } })
 
   local s, e
   if not range then
@@ -69,7 +68,7 @@ function Window.delete_range(self, range)
   end
 
   if range then
-    vim.validate({["range[1]"] = {range[1], "number"}, ["range[2]"] = {range[2], "number"}})
+    vim.validate({ ["range[1]"] = { range[1], "number" }, ["range[2]"] = { range[2], "number" } })
     s = range[1] - 1
     e = range[2]
   end
@@ -88,7 +87,7 @@ function Window.close(self)
 end
 
 function Window.on_closed(self)
-  if vim.api.nvim_win_is_valid(self._origin_window_id) then
+  if self._origin_window_id and vim.api.nvim_win_is_valid(self._origin_window_id) then
     vim.api.nvim_set_current_win(self._origin_window_id)
   end
   window_id_repository:delete(self._window_id)
