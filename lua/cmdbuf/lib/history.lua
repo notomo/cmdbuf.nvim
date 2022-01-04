@@ -6,7 +6,7 @@ function M.delete(name, str)
 end
 
 function M.filter_map(name, f)
-  vim.validate({name = {name, "string"}, f = {f, "function"}})
+  vim.validate({ name = { name, "string" }, f = { f, "function" } })
   local count = vim.fn.histnr(name)
   local cmds = {}
   for i = 1, count, 1 do

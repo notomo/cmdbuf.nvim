@@ -2,7 +2,6 @@ local helper = require("cmdbuf.lib.testlib.helper")
 local cmdbuf = helper.require("cmdbuf")
 
 describe("vim/cmd handler", function()
-
   before_each(helper.before_each)
   after_each(helper.after_each)
 
@@ -20,7 +19,7 @@ describe("vim/cmd handler", function()
     cmdbuf.open()
     helper.set_lines([[tabedit]])
 
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
 
     assert.tab_count(2)
   end)
@@ -29,7 +28,7 @@ describe("vim/cmd handler", function()
     cmdbuf.open()
     helper.set_lines([[1tabedit]])
 
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
     cmdbuf.open()
 
     assert.exists_pattern([[^1tabedit$]])
@@ -39,7 +38,7 @@ describe("vim/cmd handler", function()
     cmdbuf.open()
     helper.set_lines([[invalid_test_cmd]])
 
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
 
     assert.exists_message("E492: Not an editor command: invalid_test_cmd")
   end)
@@ -50,7 +49,7 @@ describe("vim/cmd handler", function()
     cmdbuf.split_open()
     helper.set_lines([[append]])
 
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
 
     assert.exists_message("E21: Cannot make changes, 'modifiable' is off")
   end)
@@ -66,5 +65,4 @@ describe("vim/cmd handler", function()
     vim.cmd("edit!")
     assert.no.exists_pattern("delete_target_cmd")
   end)
-
 end)

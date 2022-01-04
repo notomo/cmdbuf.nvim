@@ -2,11 +2,10 @@ local M = {}
 
 local Layouts = {}
 
-function Layouts.no()
-end
+function Layouts.no() end
 
 function Layouts.vsplit(width)
-  vim.validate({width = {width, "number", true}})
+  vim.validate({ width = { width, "number", true } })
   return function()
     vim.cmd("vsplit")
     vim.cmd("wincmd l")
@@ -17,7 +16,7 @@ function Layouts.vsplit(width)
 end
 
 function Layouts.split(height)
-  vim.validate({height = {height, "number", true}})
+  vim.validate({ height = { height, "number", true } })
   return function()
     vim.cmd("botright split")
     vim.cmd("wincmd j")
@@ -52,7 +51,7 @@ function Layout.new(opts)
     error("unexpected layout type: " .. typ)
   end
 
-  local tbl = {_f = f}
+  local tbl = { _f = f }
   return setmetatable(tbl, Layout)
 end
 

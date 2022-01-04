@@ -2,7 +2,6 @@ local helper = require("cmdbuf.lib.testlib.helper")
 local cmdbuf = helper.require("cmdbuf")
 
 describe("cmdbuf.nvim", function()
-
   before_each(helper.before_each)
   after_each(helper.after_each)
 
@@ -71,7 +70,7 @@ history2]])
     cmdbuf.open()
     helper.set_lines([[tabedit]])
 
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
 
     assert.tab_count(2)
   end)
@@ -80,7 +79,7 @@ history2]])
     cmdbuf.split_open()
     helper.set_lines([[tabedit]])
 
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
 
     assert.tab_count(2)
 
@@ -111,7 +110,7 @@ history2]])
 
   it("can open with line", function()
     local cmd = "tabedit"
-    cmdbuf.open({line = cmd, column = #cmd})
+    cmdbuf.open({ line = cmd, column = #cmd })
 
     assert.current_line("tabedit")
     assert.current_row(vim.fn.line("$"))
@@ -144,7 +143,7 @@ history2]])
     vim.fn.histadd("cmd", "ranged_delete_cmd4")
 
     cmdbuf.open()
-    cmdbuf.delete({2, 3})
+    cmdbuf.delete({ 2, 3 })
 
     assert.exists_pattern("ranged_delete_cmd1")
     assert.no.exists_pattern("ranged_delete_cmd2")
@@ -187,7 +186,7 @@ history2]])
 
     cmdbuf.split_open()
     helper.set_lines([[echomsg]])
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
 
     assert.window(origin_win)
   end)
@@ -200,7 +199,7 @@ history2]])
 
     cmdbuf.split_open()
     helper.set_lines([[wincmd w]])
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
 
     assert.window(target_win)
   end)
@@ -212,11 +211,10 @@ history2]])
     local first_restored_win = vim.api.nvim_get_current_win()
     cmdbuf.split_open()
 
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
     assert.window(first_restored_win)
 
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
     assert.window(second_restored_win)
   end)
-
 end)

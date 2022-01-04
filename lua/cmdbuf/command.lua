@@ -12,7 +12,7 @@ Command.__index = Command
 M.Command = Command
 
 function Command.new(name, ...)
-  local args = {...}
+  local args = { ... }
   local f = function()
     return Command[name](unpack(args))
   end
@@ -26,7 +26,7 @@ function Command.new(name, ...)
 end
 
 function Command.open(layout_opts, opts)
-  vim.validate({layout_opts = {layout_opts, "table"}, opts = {opts, "table", true}})
+  vim.validate({ layout_opts = { layout_opts, "table" }, opts = { opts, "table", true } })
   opts = opts or {}
 
   local typ = opts.type or "vim/cmd"
@@ -41,7 +41,7 @@ function Command.open(layout_opts, opts)
 end
 
 function Command.execute(opts)
-  vim.validate({opts = {opts, "table", true}})
+  vim.validate({ opts = { opts, "table", true } })
   opts = opts or {}
   return Window.current():execute(opts.quit)
 end

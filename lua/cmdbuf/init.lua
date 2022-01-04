@@ -12,20 +12,20 @@ end
 --- @param height number|nil: window height
 --- @param opts table|nil: |cmdbuf.nvim-open-opts|
 function M.split_open(height, opts)
-  Command.new("open", {type = "split", height = height}, opts)
+  Command.new("open", { type = "split", height = height }, opts)
 end
 
 --- Open a command buffer with `vsplit`.
 --- @param width number|nil: window width
 --- @param opts table|nil: |cmdbuf.nvim-open-opts|
 function M.vsplit_open(width, opts)
-  Command.new("open", {type = "vsplit", width = width}, opts)
+  Command.new("open", { type = "vsplit", width = width }, opts)
 end
 
 --- Open a command buffer in new tab.
 --- @param opts table|nil: |cmdbuf.nvim-open-opts|
 function M.tab_open(opts)
-  Command.new("open", {type = "tab"}, opts)
+  Command.new("open", { type = "tab" }, opts)
 end
 
 --- Execute the current line command.

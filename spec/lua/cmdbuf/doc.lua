@@ -22,7 +22,8 @@ require("genvdoc").generate("cmdbuf.nvim", {
     {
       name = "OPTIONS",
       body = function(ctx)
-        return util.help_tagged(ctx, "|cmdbuf.open()| options", "cmdbuf.nvim-open-opts") .. [[
+        return util.help_tagged(ctx, "|cmdbuf.open()| options", "cmdbuf.nvim-open-opts")
+          .. [[
 
 - {line} (number|nil): set this string to the bottom line in the buffer.
 - {column} (number|nil): initial cursor column in the buffer.
@@ -32,7 +33,9 @@ require("genvdoc").generate("cmdbuf.nvim", {
   - `vim/sesarch/backward`: |q?| alternative
   - `lua/cmd`: |q:| alternative for lua command
 
-]] .. util.help_tagged(ctx, "|cmdbuf.execute()| options", "cmdbuf.nvim-execute-opts") .. [[
+]]
+          .. util.help_tagged(ctx, "|cmdbuf.execute()| options", "cmdbuf.nvim-execute-opts")
+          .. [[
 
 - {quit} (boolean|nil) whether quit the window after execution.]]
       end,

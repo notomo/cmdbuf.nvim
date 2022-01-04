@@ -23,7 +23,7 @@ function M.set_lines(lines)
 end
 
 function M.input(text)
-  vim.api.nvim_put({text}, "c", true, true)
+  vim.api.nvim_put({ text }, "c", true, true)
 end
 
 function M.search(pattern)

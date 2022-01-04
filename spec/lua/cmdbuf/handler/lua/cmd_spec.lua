@@ -2,41 +2,40 @@ local helper = require("cmdbuf.lib.testlib.helper")
 local cmdbuf = helper.require("cmdbuf")
 
 describe("lua/cmd handler", function()
-
   before_each(helper.before_each)
   after_each(helper.after_each)
 
   it("can open a lua command buffer", function()
-    cmdbuf.open({type = "lua/cmd"})
+    cmdbuf.open({ type = "lua/cmd" })
 
     assert.buffer("cmdbuf://lua/cmd-buffer")
     assert.filetype("lua")
   end)
 
   it("can execute current line as lua", function()
-    cmdbuf.open({type = "lua/cmd"})
+    cmdbuf.open({ type = "lua/cmd" })
     helper.set_lines([[vim.cmd("tabedit")]])
 
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
 
     assert.tab_count(2)
   end)
 
   it("adds history on execution", function()
-    cmdbuf.open({type = "lua/cmd"})
+    cmdbuf.open({ type = "lua/cmd" })
     helper.set_lines([[vim.cmd("0tabedit")]])
 
-    cmdbuf.execute({quit = true})
-    cmdbuf.open({type = "lua/cmd"})
+    cmdbuf.execute({ quit = true })
+    cmdbuf.open({ type = "lua/cmd" })
 
     assert.exists_pattern([[^vim.cmd("0tabedit")$]])
   end)
 
   it("shows a raw command error", function()
-    cmdbuf.open({type = "lua/cmd"})
+    cmdbuf.open({ type = "lua/cmd" })
     helper.set_lines([[invalid_lua_test_cmd]])
 
-    cmdbuf.execute({quit = true})
+    cmdbuf.execute({ quit = true })
 
     assert.exists_message([[E5107: Error loading lua %[string ":lua"%]:1: '%=' expected near '<eof>']])
   end)
@@ -44,7 +43,7 @@ describe("lua/cmd handler", function()
   it("can delete a lua command from history", function()
     vim.fn.histadd("cmd", [[lua vim.cmd("target_lua_cmd")]])
 
-    cmdbuf.open({type = "lua/cmd"})
+    cmdbuf.open({ type = "lua/cmd" })
     helper.search("target_lua_cmd")
     cmdbuf.delete()
     assert.no.exists_pattern("target_lua_cmd")
@@ -52,5 +51,4 @@ describe("lua/cmd handler", function()
     vim.cmd("edit!")
     assert.no.exists_pattern("target_lua_cmd")
   end)
-
 end)
