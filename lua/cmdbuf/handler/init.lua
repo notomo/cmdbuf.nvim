@@ -8,17 +8,13 @@ M.Handler = Handler
 function Handler.new(typ)
   vim.validate({ type = { typ, "string" } })
 
-  local handler = modulelib.find("cmdbuf/handler/" .. typ)
-  if not handler then
+  local Class = modulelib.find("cmdbuf/handler/" .. typ)
+  if not Class then
     return nil, "not found handler: " .. typ
   end
-
-  local tbl = { _handler = handler, name = typ:gsub("%.", "/") }
-  return setmetatable(tbl, Handler)
-end
-
-function Handler.__index(self, k)
-  return rawget(Handler, k) or self._handler[k]
+  local handler = Class.new()
+  handler.name = typ:gsub("%.", "/")
+  return handler
 end
 
 return M

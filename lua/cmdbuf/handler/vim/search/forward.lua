@@ -1,7 +1,13 @@
 local historylib = require("cmdbuf.lib.history")
 local messagelib = require("cmdbuf.lib.message")
+local vim = vim
 
 local M = {}
+M.__index = M
+
+function M.new()
+  return setmetatable({}, M)
+end
 
 M.flags = ""
 M.searchforward = 1

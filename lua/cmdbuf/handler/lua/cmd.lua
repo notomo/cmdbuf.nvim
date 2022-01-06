@@ -2,6 +2,11 @@ local historylib = require("cmdbuf.lib.history")
 local messagelib = require("cmdbuf.lib.message")
 
 local M = {}
+M.__index = M
+
+function M.new()
+  return setmetatable({}, M)
+end
 
 function M._lua(cmd)
   return "lua " .. cmd

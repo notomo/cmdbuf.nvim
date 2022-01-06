@@ -2,6 +2,11 @@ local historylib = require("cmdbuf.lib.history")
 local messagelib = require("cmdbuf.lib.message")
 
 local M = {}
+M.__index = M
+
+function M.new()
+  return setmetatable({}, M)
+end
 
 function M.histories()
   return historylib.filter_map("cmd", function(cmd)
