@@ -14,6 +14,7 @@ function M.after_each()
   vim.cmd("silent %bwipeout!")
   vim.cmd("filetype off")
   vim.cmd("syntax off")
+  vim.cmd("messages clear")
   M.cleanup_loaded_modules(plugin_name)
   print(" ")
 end

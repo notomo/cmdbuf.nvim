@@ -53,6 +53,7 @@ OPTIONS                                                  *cmdbuf.nvim-OPTIONS*
   - `vim/sesarch/forward`: |q/| alternative
   - `vim/sesarch/backward`: |q?| alternative
   - `lua/cmd`: |q:| alternative for lua command
+  - `lua/variable/buffer`: buffer variable and command
 
 |cmdbuf.execute()| options                          *cmdbuf.nvim-execute-opts*
 

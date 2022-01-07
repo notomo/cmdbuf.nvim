@@ -32,6 +32,7 @@ require("genvdoc").generate("cmdbuf.nvim", {
   - `vim/sesarch/forward`: |q/| alternative
   - `vim/sesarch/backward`: |q?| alternative
   - `lua/cmd`: |q:| alternative for lua command
+  - `lua/variable/buffer`: buffer variable and command
 
 ]]
           .. util.help_tagged(ctx, "|cmdbuf.execute()| options", "cmdbuf.nvim-execute-opts")
