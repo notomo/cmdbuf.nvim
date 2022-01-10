@@ -46,9 +46,9 @@ OPTIONS                                                  *cmdbuf.nvim-OPTIONS*
 
 |cmdbuf.open()| options                                *cmdbuf.nvim-open-opts*
 
-- {line} (number|nil): set this string to the bottom line in the buffer.
-- {column} (number|nil): initial cursor column in the buffer.
-- {type} (string|nil): handler type (default = "vim/cmd")
+- {column} (number | nil): initial cursor column in the buffer.
+- {line} (number | nil): set this string to the bottom line in the buffer.
+- {type} (string | nil): handler type (default = "vim/cmd")
   - `vim/cmd`: |q:| alternative
   - `vim/sesarch/forward`: |q/| alternative
   - `vim/sesarch/backward`: |q?| alternative
@@ -57,7 +57,7 @@ OPTIONS                                                  *cmdbuf.nvim-OPTIONS*
 
 |cmdbuf.execute()| options                          *cmdbuf.nvim-execute-opts*
 
-- {quit} (boolean|nil) whether quit the window after execution.
+- {quit} (boolean | nil): whether quit the window after execution.
 
 ==============================================================================
 AUTOCOMMANDS                                        *cmdbuf.nvim-AUTOCOMMANDS*

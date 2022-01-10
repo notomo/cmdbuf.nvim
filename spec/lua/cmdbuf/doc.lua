@@ -1,12 +1,11 @@
-local example_path = "./spec/lua/cmdbuf/example.vim"
 local util = require("genvdoc.util")
+local plugin_name = vim.env.PLUGIN_NAME
 
-local ok, result = pcall(vim.cmd, "source" .. example_path)
-if not ok then
-  error(result)
-end
+local example_path = ("./spec/lua/%s/example.vim"):format(plugin_name)
 
-require("genvdoc").generate("cmdbuf.nvim", {
+vim.cmd("source" .. example_path)
+
+require("genvdoc").generate(plugin_name .. ".nvim", {
   chapters = {
     {
       name = function(group)
@@ -22,23 +21,37 @@ require("genvdoc").generate("cmdbuf.nvim", {
     {
       name = "OPTIONS",
       body = function(ctx)
-        return util.help_tagged(ctx, "|cmdbuf.open()| options", "cmdbuf.nvim-open-opts")
-          .. [[
-
-- {line} (number|nil): set this string to the bottom line in the buffer.
-- {column} (number|nil): initial cursor column in the buffer.
-- {type} (string|nil): handler type (default = "vim/cmd")
+        local open_opts_text
+        do
+          local descriptions = {
+            line = [[(number | nil): set this string to the bottom line in the buffer.]],
+            column = [[(number | nil): initial cursor column in the buffer.]],
+            type = [[(string | nil): handler type (default = "vim/cmd")
   - `vim/cmd`: |q:| alternative
   - `vim/sesarch/forward`: |q/| alternative
   - `vim/sesarch/backward`: |q?| alternative
   - `lua/cmd`: |q:| alternative for lua command
-  - `lua/variable/buffer`: buffer variable and command
+  - `lua/variable/buffer`: buffer variable and command]],
+          }
+          local keys = vim.tbl_keys(descriptions)
+          local lines = util.each_keys_description(keys, descriptions)
+          open_opts_text = table.concat(lines, "\n")
+        end
 
-]]
-          .. util.help_tagged(ctx, "|cmdbuf.execute()| options", "cmdbuf.nvim-execute-opts")
-          .. [[
+        local execute_opts_text
+        do
+          local descriptions = {
+            quit = [[(boolean | nil): whether quit the window after execution.]],
+          }
+          local keys = vim.tbl_keys(descriptions)
+          local lines = util.each_keys_description(keys, descriptions)
+          execute_opts_text = table.concat(lines, "\n")
+        end
 
-- {quit} (boolean|nil) whether quit the window after execution.]]
+        return util.sections(ctx, {
+          { name = "|cmdbuf.open()| options", tag_name = "open-opts", text = open_opts_text },
+          { name = "|cmdbuf.execute()| options", tag_name = "execute-opts", text = execute_opts_text },
+        })
       end,
     },
     {
