@@ -2,7 +2,7 @@ local Buffer = require("cmdbuf.core.buffer").Buffer
 local Window = require("cmdbuf.core.window").Window
 local Layout = require("cmdbuf.layout").Layout
 local Handler = require("cmdbuf.handler").Handler
-local messagelib = require("cmdbuf.lib.message")
+local messagelib = require("cmdbuf.vendor.message")
 local vim = vim
 
 local M = {}
