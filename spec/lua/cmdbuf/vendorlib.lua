@@ -1,13 +1,5 @@
 return {
-  targets = {
-    {
-      from = {
-        names = {
-          "error_handler",
-          "message",
-          "module",
-        },
-      },
-    },
-  },
+  "lua/misclib/error_handler.lua",
+  "lua/misclib/message.lua",
+  "lua/misclib/module.lua",
 }
