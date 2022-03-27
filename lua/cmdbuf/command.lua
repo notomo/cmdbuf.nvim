@@ -2,7 +2,7 @@ local Buffer = require("cmdbuf.core.buffer").Buffer
 local Window = require("cmdbuf.core.window").Window
 local Layout = require("cmdbuf.layout").Layout
 local Handler = require("cmdbuf.handler").Handler
-local ShowError = require("cmdbuf.vendor.error_handler").for_show_error()
+local ShowError = require("cmdbuf.vendor.misclib.error_handler").for_show_error()
 local vim = vim
 
 function ShowError.open(layout_opts, opts)

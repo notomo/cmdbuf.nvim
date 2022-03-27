@@ -1,4 +1,4 @@
-local modulelib = require("cmdbuf.vendor.module")
+local modulelib = require("cmdbuf.vendor.misclib.module")
 
 local M = {}
 
