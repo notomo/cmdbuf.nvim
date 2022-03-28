@@ -13,4 +13,4 @@ doc:
 
 vendor:
 	nvim --headless -i NONE -n +"lua require('vendorlib').install('${PLUGIN_NAME}', '${SPEC_DIR}/vendorlib.lua')" +"quitall!"
-.PHONY: doc
+.PHONY: vendor

@@ -52,6 +52,20 @@ function M.for_show_error()
   end)
 end
 
+function M.for_show_as_user_error()
+  return M.new(function(f)
+    local ok, err = xpcall(f, debug.traceback)
+    if not ok then
+      messagelib.error(err)
+      return nil
+    elseif err then
+      messagelib.user_error(err)
+      return nil
+    end
+    return nil
+  end)
+end
+
 function M.methods(self)
   local methods = {}
   for key in pairs(self) do
