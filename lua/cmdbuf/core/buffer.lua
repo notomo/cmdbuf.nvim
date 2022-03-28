@@ -1,4 +1,4 @@
-local buffer_repository = require("cmdbuf.lib.repository").Repository.new("buffer")
+local buffers = {}
 
 local M = {}
 
@@ -26,7 +26,7 @@ function Buffer.create(handler, name, line)
   local bufnr = vim.api.nvim_create_buf(false, true)
   local tbl = { _bufnr = bufnr, _handler = handler }
   local self = setmetatable(tbl, Buffer)
-  buffer_repository:set(bufnr, self)
+  buffers[bufnr] = self
 
   self:load(line)
 
@@ -47,7 +47,7 @@ end
 
 function Buffer.get(bufnr)
   vim.validate({ bufnr = { bufnr, "number" } })
-  local buffer = buffer_repository:get(bufnr)
+  local buffer = buffers[bufnr]
   if not buffer then
     error(("state is not found in buffer: %s"):format(bufnr))
   end
@@ -95,7 +95,7 @@ function Buffer.set_to(self, window_id)
 end
 
 function Buffer.cleanup(self)
-  buffer_repository:delete(self._bufnr)
+  buffers[self._bufnr] = nil
 end
 
 return M
