@@ -1,16 +1,3 @@
-# cmdbuf.nvim
-
-[![ci](https://github.com/notomo/cmdbuf.nvim/workflows/ci/badge.svg?branch=main)](https://github.com/notomo/cmdbuf.nvim/actions?query=workflow%3Aci+branch%3Amain)
-
-The builtin command-line window is a special window.  
-For example, you cannot leave it by `wincmd`.  
-This plugin provides command-line window functions by normal buffer and window.  
-
-<img src="https://raw.github.com/wiki/notomo/cmdbuf.nvim/image/demo.gif" width="1280">
-
-## Example
-
-```lua
 vim.keymap.set("n", "q:", function()
   require("cmdbuf").split_open(vim.o.cmdwinheight)
 end)
@@ -41,4 +28,3 @@ end)
 vim.keymap.set("n", "q?", function()
   require("cmdbuf").split_open(vim.o.cmdwinheight, { type = "vim/search/backward" })
 end)
-```

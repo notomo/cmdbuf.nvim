@@ -1,9 +1,8 @@
 local util = require("genvdoc.util")
 local plugin_name = vim.env.PLUGIN_NAME
 
-local example_path = ("./spec/lua/%s/example.vim"):format(plugin_name)
-
-vim.cmd("source" .. example_path)
+local example_path = ("./spec/lua/%s/example.lua"):format(plugin_name)
+dofile(example_path)
 
 require("genvdoc").generate(plugin_name .. ".nvim", {
   sources = { { name = "lua", pattern = ("lua/%s/init.lua"):format(plugin_name) } },
@@ -90,7 +89,7 @@ This plugin provides command-line window functions by normal buffer and window.
 
 ## Example
 
-```vim
+```lua
 %s```]]):format(exmaple)
 
   local readme = io.open("README.md", "w")

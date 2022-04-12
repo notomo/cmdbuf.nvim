@@ -69,37 +69,36 @@ CmdbufNew                                              *cmdbuf.nvim-CmdbufNew*
 EXAMPLES                                                *cmdbuf.nvim-EXAMPLES*
 
 >
-  nnoremap q: <Cmd>lua require('cmdbuf').split_open(vim.o.cmdwinheight)<CR>
-  cnoremap <C-f> <Cmd>lua require('cmdbuf').split_open(
-    \ vim.o.cmdwinheight,
-    \ {line = vim.fn.getcmdline(), column = vim.fn.getcmdpos()}
-    \ )<CR><C-c>
+  vim.keymap.set("n", "q:", function()
+    require("cmdbuf").split_open(vim.o.cmdwinheight)
+  end)
+  vim.keymap.set("c", "<C-f>", function()
+    require("cmdbuf").split_open(vim.o.cmdwinheight, { line = vim.fn.getcmdline(), column = vim.fn.getcmdpos() })
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-c>", true, false, true), "n", true)
+  end)
 
-  " Custom buffer mappings
-  augroup cmdbuf_setting
-    autocmd!
-    autocmd User CmdbufNew call s:cmdbuf()
-  augroup END
-  function! s:cmdbuf() abort
-    nnoremap <nowait> <buffer> q <Cmd>quit<CR>
-    nnoremap <buffer> dd <Cmd>lua require('cmdbuf').delete()<CR>
-  endfunction
+  -- Custom buffer mappings
+  vim.api.nvim_create_autocmd({ "User" }, {
+    group = vim.api.nvim_create_augroup("cmdbuf_setting", {}),
+    pattern = { "CmdbufNew" },
+    callback = function()
+      vim.keymap.set("n", "q", [[<Cmd>quit<CR>]], { nowait = true, buffer = true })
+      vim.keymap.set("n", "dd", [[<Cmd>lua require('cmdbuf').delete()<CR>]], { buffer = true })
+    end,
+  })
 
-  " open lua command-line window
-  nnoremap ql <Cmd>lua require('cmdbuf').split_open(
-    \ vim.o.cmdwinheight,
-    \ {type = "lua/cmd"}
-    \ )<CR>
+  -- open lua command-line window
+  vim.keymap.set("n", "ql", function()
+    require("cmdbuf").split_open(vim.o.cmdwinheight, { type = "lua/cmd" })
+  end)
 
-  " q/, q? alternative
-  nnoremap q/ <Cmd>lua require('cmdbuf').split_open(
-    \ vim.o.cmdwinheight,
-    \ {type = "vim/search/forward"}
-    \ )<CR>
-  nnoremap q? <Cmd>lua require('cmdbuf').split_open(
-    \ vim.o.cmdwinheight,
-    \ {type = "vim/search/backward"}
-    \ )<CR>
+  -- q/, q? alternative
+  vim.keymap.set("n", "q/", function()
+    require("cmdbuf").split_open(vim.o.cmdwinheight, { type = "vim/search/forward" })
+  end)
+  vim.keymap.set("n", "q?", function()
+    require("cmdbuf").split_open(vim.o.cmdwinheight, { type = "vim/search/backward" })
+  end)
 <
 
 ==============================================================================
