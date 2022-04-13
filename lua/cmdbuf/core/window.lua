@@ -1,5 +1,5 @@
 local Buffer = require("cmdbuf.core.buffer").Buffer
-local cursorlib = require("cmdbuf.lib.cursor")
+local cursorlib = require("cmdbuf.vendor.misclib.cursor")
 
 local windows = {}
 
@@ -23,7 +23,7 @@ function Window.open(buffer, created, layout, line, column)
     cursorlib.to_bottom(window_id)
   end
   if column then
-    cursorlib.set_column(column)
+    cursorlib.set_column(column - 1)
   end
 end
 
