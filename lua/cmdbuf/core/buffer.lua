@@ -34,13 +34,25 @@ function Buffer.create(handler, name, line)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<CR>", [[<Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
   vim.api.nvim_buf_set_keymap(bufnr, "i", "<CR>", [[<ESC><Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
 
-  vim.cmd(("autocmd BufReadCmd <buffer=%s> lua require('cmdbuf.command').reload(%s)"):format(bufnr, bufnr))
-  vim.cmd(
-    ("autocmd WinClosed <buffer=%s> lua require('cmdbuf.command').on_win_closed(tonumber(vim.fn.expand('<afile>')))"):format(
-      bufnr
-    )
-  )
-  vim.cmd(("autocmd BufWipeout <buffer=%s> lua require('cmdbuf.command').cleanup(%s)"):format(bufnr, bufnr))
+  vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
+    buffer = bufnr,
+    callback = function()
+      self:load()
+    end,
+  })
+  vim.api.nvim_create_autocmd({ "WinClosed" }, {
+    buffer = bufnr,
+    callback = function(args)
+      local window_id = tonumber(args.file)
+      require("cmdbuf.command").on_win_closed(window_id)
+    end,
+  })
+  vim.api.nvim_create_autocmd({ "BufWipeout" }, {
+    buffer = bufnr,
+    callback = function()
+      self:cleanup()
+    end,
+  })
 
   return self
 end

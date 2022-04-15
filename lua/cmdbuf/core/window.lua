@@ -17,8 +17,8 @@ function Window.open(buffer, created, layout, line, column)
 
   if created then
     cursorlib.to_bottom(window_id)
-    vim.cmd("doautocmd <nomodeline> BufRead") -- HACK?
-    vim.cmd("doautocmd <nomodeline> User CmdbufNew")
+    vim.api.nvim_exec_autocmds("BufRead", { modeline = false }) -- HACK?
+    vim.api.nvim_exec_autocmds("User", { pattern = "CmdbufNew", modeline = false })
   elseif line then
     cursorlib.to_bottom(window_id)
   end

@@ -30,16 +30,8 @@ function ShowError.delete(range)
   return Window.current():delete_range(range)
 end
 
-function ShowError.reload(bufnr)
-  return Buffer.get(bufnr):load()
-end
-
 function ShowError.on_win_closed(window_id)
   return Window.get(window_id):on_closed()
-end
-
-function ShowError.cleanup(bufnr)
-  return Buffer.get(bufnr):cleanup()
 end
 
 return ShowError:methods()
