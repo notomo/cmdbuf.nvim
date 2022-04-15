@@ -1,19 +1,16 @@
-local Buffer = require("cmdbuf.core.buffer").Buffer
+local Buffer = require("cmdbuf.core.buffer")
 local cursorlib = require("cmdbuf.vendor.misclib.cursor")
 
-local windows = {}
-
-local M = {}
+local _windows = {}
 
 local Window = {}
 Window.__index = Window
-M.Window = Window
 
 function Window.open(buffer, created, layout, line, column)
   local origin_window_id = vim.api.nvim_get_current_win()
   local window_id = layout:open()
   buffer:set_to(window_id)
-  windows[window_id] = origin_window_id
+  _windows[window_id] = origin_window_id
 
   if created then
     cursorlib.to_bottom(window_id)
@@ -35,7 +32,7 @@ end
 function Window.get(window_id)
   vim.validate({ window_id = { window_id, "number" } })
   local bufnr = vim.api.nvim_win_get_buf(window_id)
-  local origin_window_id = windows[window_id]
+  local origin_window_id = _windows[window_id]
   local tbl = {
     _window_id = window_id,
     _buffer = Buffer.get(bufnr),
@@ -91,7 +88,7 @@ function Window.on_closed(self)
   if self._origin_window_id and vim.api.nvim_win_is_valid(self._origin_window_id) then
     vim.api.nvim_set_current_win(self._origin_window_id)
   end
-  windows[self._window_id] = nil
+  _windows[self._window_id] = nil
 end
 
-return M
+return Window

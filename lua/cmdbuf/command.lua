@@ -1,7 +1,4 @@
-local Buffer = require("cmdbuf.core.buffer").Buffer
-local Window = require("cmdbuf.core.window").Window
-local Layout = require("cmdbuf.layout").Layout
-local Handler = require("cmdbuf.handler").Handler
+local Window = require("cmdbuf.core.window")
 local ShowError = require("cmdbuf.vendor.misclib.error_handler").for_show_error()
 local vim = vim
 
@@ -10,13 +7,13 @@ function ShowError.open(layout_opts, opts)
   opts = opts or {}
 
   local typ = opts.type or "vim/cmd"
-  local handler, err = Handler.new(typ)
+  local handler, err = require("cmdbuf.handler").new(typ)
   if err then
     return err
   end
 
-  local buffer, created = Buffer.get_or_create(handler, opts.line)
-  local layout = Layout.new(layout_opts)
+  local buffer, created = require("cmdbuf.core.buffer").get_or_create(handler, opts.line)
+  local layout = require("cmdbuf.layout").new(layout_opts)
   Window.open(buffer, created, layout, opts.line, opts.column)
 end
 

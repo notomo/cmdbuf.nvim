@@ -1,9 +1,6 @@
 local modulelib = require("cmdbuf.vendor.misclib.module")
 
-local M = {}
-
 local Handler = {}
-M.Handler = Handler
 
 function Handler.new(typ)
   vim.validate({ type = { typ, "string" } })
@@ -17,4 +14,4 @@ function Handler.new(typ)
   return handler
 end
 
-return M
+return Handler

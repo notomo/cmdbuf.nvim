@@ -1,10 +1,7 @@
-local buffers = {}
-
-local M = {}
+local _buffers = {}
 
 local Buffer = {}
 Buffer.__index = Buffer
-M.Buffer = Buffer
 
 function Buffer.get_or_create(handler, line)
   local name = ("cmdbuf://%s-buffer"):format(handler.name)
@@ -26,7 +23,7 @@ function Buffer.create(handler, name, line)
   local bufnr = vim.api.nvim_create_buf(false, true)
   local tbl = { _bufnr = bufnr, _handler = handler }
   local self = setmetatable(tbl, Buffer)
-  buffers[bufnr] = self
+  _buffers[bufnr] = self
 
   self:load(line)
 
@@ -59,7 +56,7 @@ end
 
 function Buffer.get(bufnr)
   vim.validate({ bufnr = { bufnr, "number" } })
-  local buffer = buffers[bufnr]
+  local buffer = _buffers[bufnr]
   if not buffer then
     error(("state is not found in buffer: %s"):format(bufnr))
   end
@@ -107,7 +104,7 @@ function Buffer.set_to(self, window_id)
 end
 
 function Buffer.cleanup(self)
-  buffers[self._bufnr] = nil
+  _buffers[self._bufnr] = nil
 end
 
-return M
+return Buffer
