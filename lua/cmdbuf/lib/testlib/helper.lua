@@ -1,33 +1,25 @@
 local plugin_name = vim.split((...):gsub("%.", "/"), "/", true)[1]
-local M = require("vusted.helper")
+local helper = require("vusted.helper")
 
-M.root = M.find_plugin_root(plugin_name)
+helper.root = helper.find_plugin_root(plugin_name)
+helper.cleanup()
 
-function M.before_each()
-  vim.cmd("filetype on")
-  vim.cmd("syntax enable")
+function helper.before_each() end
+
+function helper.after_each()
+  helper.cleanup()
+  helper.cleanup_loaded_modules(plugin_name)
 end
 
-function M.after_each()
-  vim.cmd("tabedit")
-  vim.cmd("tabonly!")
-  vim.cmd("silent %bwipeout!")
-  vim.cmd("filetype off")
-  vim.cmd("syntax off")
-  vim.cmd("messages clear")
-  M.cleanup_loaded_modules(plugin_name)
-  print(" ")
-end
-
-function M.set_lines(lines)
+function helper.set_lines(lines)
   vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(lines, "\n"))
 end
 
-function M.input(text)
+function helper.input(text)
   vim.api.nvim_put({ text }, "c", true, true)
 end
 
-function M.search(pattern)
+function helper.search(pattern)
   local result = vim.fn.search(pattern)
   if result == 0 then
     local info = debug.getinfo(2)
@@ -107,4 +99,4 @@ asserts.create("exists_message"):register(function(self)
   end
 end)
 
-return M
+return helper
