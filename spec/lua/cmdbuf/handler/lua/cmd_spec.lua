@@ -51,4 +51,13 @@ describe("lua/cmd handler", function()
     vim.cmd("edit!")
     assert.no.exists_pattern("target_lua_cmd")
   end)
+
+  it("lists including lua= command", function()
+    vim.fn.histadd("cmd", [[lua="equal_test"]])
+
+    cmdbuf.open({ type = "lua/cmd" })
+    helper.search("equal_test")
+
+    assert.exists_pattern([[="equal_test"]])
+  end)
 end)
