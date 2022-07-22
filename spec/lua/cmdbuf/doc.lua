@@ -85,7 +85,7 @@ The builtin command-line window is a special window.
 For example, you cannot leave it by `wincmd`.  
 This plugin provides command-line window functions by normal buffer and window.  
 
-<img src="https://raw.github.com/wiki/notomo/cmdbuf.nvim/image/demo.gif" width="1280">
+<img src="https://raw.github.com/wiki/notomo/cmdbuf.nvim/image/demo.gif">
 
 ## Example
 
