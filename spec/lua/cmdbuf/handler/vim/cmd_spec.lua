@@ -62,7 +62,7 @@ describe("vim/cmd handler", function()
     cmdbuf.delete()
     assert.no.exists_pattern("delete_target_cmd")
 
-    vim.cmd("edit!")
+    vim.cmd.edit({ bang = true })
     assert.no.exists_pattern("delete_target_cmd")
   end)
 end)

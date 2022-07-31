@@ -56,7 +56,7 @@ describe("lua/variable/buffer handler", function()
     cmdbuf.open({ type = typ })
 
     vim.api.nvim_buf_delete(bufnr, { force = true })
-    vim.cmd([[edit!]])
+    vim.cmd.edit({ bang = true })
 
     assert.no.exists_pattern("\\S")
   end)
@@ -69,7 +69,7 @@ describe("lua/variable/buffer handler", function()
     cmdbuf.delete()
     assert.no.exists_pattern("delete_test")
 
-    vim.cmd("edit!")
+    vim.cmd.edit({ bang = true })
     assert.no.exists_pattern("delete_test")
   end)
 end)

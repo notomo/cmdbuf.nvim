@@ -62,7 +62,7 @@ describe("vim/search/forward handler", function()
     cmdbuf.delete()
     assert.no.exists_pattern("delete_search_forward")
 
-    vim.cmd("edit!")
+    vim.cmd.edit({ bang = true })
     assert.no.exists_pattern("delete_search_forward")
   end)
 end)

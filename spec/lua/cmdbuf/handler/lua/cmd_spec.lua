@@ -14,7 +14,7 @@ describe("lua/cmd handler", function()
 
   it("can execute current line as lua", function()
     cmdbuf.open({ type = "lua/cmd" })
-    helper.set_lines([[vim.cmd("tabedit")]])
+    helper.set_lines([[vim.cmd.tabedit()]])
 
     cmdbuf.execute({ quit = true })
 
@@ -23,12 +23,12 @@ describe("lua/cmd handler", function()
 
   it("adds history on execution", function()
     cmdbuf.open({ type = "lua/cmd" })
-    helper.set_lines([[vim.cmd("0tabedit")]])
+    helper.set_lines([[vim.cmd.tabedit({range = {0}})]])
 
     cmdbuf.execute({ quit = true })
     cmdbuf.open({ type = "lua/cmd" })
 
-    assert.exists_pattern([[^vim.cmd("0tabedit")$]])
+    assert.exists_pattern([[^vim.cmd.tabedit({range = {0}})$]])
   end)
 
   it("shows a raw command error", function()
@@ -41,14 +41,14 @@ describe("lua/cmd handler", function()
   end)
 
   it("can delete a lua command from history", function()
-    vim.fn.histadd("cmd", [[lua vim.cmd("target_lua_cmd")]])
+    vim.fn.histadd("cmd", [[lua vim.cmd.target_lua_cmd()]])
 
     cmdbuf.open({ type = "lua/cmd" })
     helper.search("target_lua_cmd")
     cmdbuf.delete()
     assert.no.exists_pattern("target_lua_cmd")
 
-    vim.cmd("edit!")
+    vim.cmd.edit({ bang = true })
     assert.no.exists_pattern("target_lua_cmd")
   end)
 

@@ -9,20 +9,20 @@ describe("cmdbuf.nvim", function()
     local origin = vim.api.nvim_get_current_buf()
 
     local origin_win1 = vim.api.nvim_get_current_win()
-    vim.cmd("vsplit")
+    vim.cmd.vsplit()
     local origin_win2 = vim.api.nvim_get_current_win()
 
     cmdbuf.split_open()
 
-    vim.cmd("wincmd k")
+    vim.cmd.wincmd("k")
     assert.bufnr(origin)
 
     vim.api.nvim_set_current_win(origin_win1)
-    vim.cmd("wincmd j")
+    vim.cmd.wincmd("j")
     assert.buffer("cmdbuf://vim/cmd-buffer")
 
     vim.api.nvim_set_current_win(origin_win2)
-    vim.cmd("wincmd j")
+    vim.cmd.wincmd("j")
     assert.buffer("cmdbuf://vim/cmd-buffer")
   end)
 
@@ -31,10 +31,10 @@ describe("cmdbuf.nvim", function()
 
     cmdbuf.vsplit_open()
 
-    vim.cmd("wincmd h")
+    vim.cmd.wincmd("h")
     assert.bufnr(origin)
 
-    vim.cmd("wincmd l")
+    vim.cmd.wincmd("l")
     assert.buffer("cmdbuf://vim/cmd-buffer")
   end)
 
@@ -59,7 +59,7 @@ history2]])
   it("can open the same buffer more than two", function()
     cmdbuf.open()
     local bufnr = vim.api.nvim_get_current_buf()
-    vim.cmd("tabedit")
+    vim.cmd.tabedit()
 
     cmdbuf.open()
 
@@ -83,7 +83,7 @@ history2]])
 
     assert.tab_count(2)
 
-    vim.cmd("tabprevious")
+    vim.cmd.tabprevious()
     assert.window_count(1)
   end)
 
@@ -92,7 +92,7 @@ history2]])
     helper.set_lines([[tabedit]])
 
     cmdbuf.execute()
-    vim.cmd("tabprevious")
+    vim.cmd.tabprevious()
     cmdbuf.execute()
 
     assert.tab_count(3)
@@ -101,9 +101,9 @@ history2]])
   it("can reload the buffer", function()
     vim.fn.histadd("cmd", "reloaded_history")
     cmdbuf.open()
-    vim.cmd("%delete _")
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, {})
 
-    vim.cmd("edit!")
+    vim.cmd.edit({ bang = true })
 
     assert.exists_pattern("reloaded_history")
   end)
@@ -118,7 +118,13 @@ history2]])
   end)
 
   it("fires CmdbufNew on opening a new buffer", function()
-    vim.cmd("autocmd User CmdbufNew ++once lua vim.b.cmdbuf_test = 'fired_cmdbuf_new!'")
+    vim.api.nvim_create_autocmd({ "User" }, {
+      pattern = { "CmdbufNew" },
+      once = true,
+      callback = function()
+        vim.b.cmdbuf_test = "fired_cmdbuf_new!"
+      end,
+    })
 
     cmdbuf.open()
 
@@ -129,7 +135,7 @@ history2]])
     vim.fn.histadd("cmd", "can_restore_after_quit!")
 
     cmdbuf.split_open()
-    vim.cmd("quit!")
+    vim.cmd.quit({ bang = true })
     cmdbuf.split_open()
 
     assert.exists_pattern("can_restore_after_quit!")
@@ -150,7 +156,7 @@ history2]])
     assert.no.exists_pattern("ranged_delete_cmd3")
     assert.exists_pattern("ranged_delete_cmd4")
 
-    vim.cmd("edit!")
+    vim.cmd.edit({ bang = true })
 
     assert.exists_pattern("ranged_delete_cmd1")
     assert.no.exists_pattern("ranged_delete_cmd2")
@@ -162,26 +168,26 @@ history2]])
     vim.fn.histadd("cmd", "can_reopen")
 
     cmdbuf.vsplit_open()
-    vim.cmd("bwipeout")
+    vim.cmd.bwipeout()
     cmdbuf.vsplit_open()
 
     assert.exists_pattern("can_reopen")
   end)
 
   it("restores current window on closed", function()
-    vim.cmd("vsplit")
-    vim.cmd("wincmd w")
+    vim.cmd.vsplit()
+    vim.cmd.wincmd("w")
     local origin_win = vim.api.nvim_get_current_win()
 
     cmdbuf.split_open()
-    vim.cmd("quit")
+    vim.cmd.quit()
 
     assert.window(origin_win)
   end)
 
   it("restores current window on executed", function()
-    vim.cmd("vsplit")
-    vim.cmd("wincmd w")
+    vim.cmd.vsplit()
+    vim.cmd.wincmd("w")
     local origin_win = vim.api.nvim_get_current_win()
 
     cmdbuf.split_open()
@@ -192,10 +198,10 @@ history2]])
   end)
 
   it("works wincmd", function()
-    vim.cmd("vsplit")
-    vim.cmd("wincmd w")
+    vim.cmd.vsplit()
+    vim.cmd.wincmd("w")
     local target_win = vim.api.nvim_get_current_win()
-    vim.cmd("wincmd p")
+    vim.cmd.wincmd("p")
 
     cmdbuf.split_open()
     helper.set_lines([[wincmd w]])

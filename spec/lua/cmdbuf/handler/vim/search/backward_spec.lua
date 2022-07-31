@@ -53,7 +53,7 @@ describe("vim/search/backward handler", function()
     cmdbuf.delete()
     assert.no.exists_pattern("delete_search_backward")
 
-    vim.cmd("edit!")
+    vim.cmd.edit({ bang = true })
     assert.no.exists_pattern("delete_search_backward")
   end)
 
