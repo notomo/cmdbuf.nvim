@@ -31,7 +31,7 @@ end
 local Layout = {}
 Layout.__index = Layout
 
-function Layout.new(opts)
+function Layout.new(opts, reusable_window_ids)
   opts = opts or {}
   local typ = opts.type
 
@@ -48,11 +48,20 @@ function Layout.new(opts)
     error("unexpected layout type: " .. typ)
   end
 
-  local tbl = { _f = f }
+  local tbl = { _f = f, _reusable_window_ids = reusable_window_ids }
   return setmetatable(tbl, Layout)
 end
 
-function Layout.open(self)
+function Layout.open(self, buffer_name)
+  for _, window_id in ipairs(self._reusable_window_ids) do
+    local bufnr = vim.api.nvim_win_get_buf(window_id)
+    local name = vim.api.nvim_buf_get_name(bufnr)
+    if name == buffer_name then
+      vim.api.nvim_set_current_win(window_id)
+      return window_id
+    end
+  end
+
   self._f()
   return vim.api.nvim_get_current_win()
 end

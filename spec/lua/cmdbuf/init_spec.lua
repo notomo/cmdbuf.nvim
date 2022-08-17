@@ -223,4 +223,25 @@ history2]])
     cmdbuf.execute({ quit = true })
     assert.window(second_restored_win)
   end)
+
+  it("can reuse the same type window", function()
+    vim.cmd.vsplit()
+
+    cmdbuf.split_open()
+    local window_id = vim.api.nvim_get_current_win()
+
+    vim.cmd.wincmd("w")
+
+    cmdbuf.open({ reusable_window_ids = vim.api.nvim_tabpage_list_wins(0) })
+
+    assert.window(window_id)
+    assert.buffer("cmdbuf://vim/cmd-buffer")
+  end)
+
+  it("ignores reusable windows when there is no the same type window", function()
+    cmdbuf.split_open(vim.o.cmdwinheight, { reusable_window_ids = vim.api.nvim_tabpage_list_wins(0) })
+
+    assert.window_count(2)
+    assert.buffer("cmdbuf://vim/cmd-buffer")
+  end)
 end)

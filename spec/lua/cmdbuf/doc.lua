@@ -26,6 +26,7 @@ require("genvdoc").generate(plugin_name .. ".nvim", {
           local descriptions = {
             line = [[(number | nil): set this string to the bottom line in the buffer.]],
             column = [[(number | nil): initial cursor column in the buffer.]],
+            reusable_window_ids = [[(list | nil): force to reuse the window that has the same buffer name. (default: {})]],
             type = [[(string | nil): handler type (default = "vim/cmd")
   - `vim/cmd`: |q:| alternative
   - `vim/sesarch/forward`: |q/| alternative

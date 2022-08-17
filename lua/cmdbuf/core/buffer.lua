@@ -103,6 +103,10 @@ function Buffer.set_to(self, window_id)
   vim.api.nvim_win_set_buf(window_id, self._bufnr)
 end
 
+function Buffer.name(self)
+  return vim.api.nvim_buf_get_name(self._bufnr)
+end
+
 function Buffer.cleanup(self)
   _buffers[self._bufnr] = nil
 end
