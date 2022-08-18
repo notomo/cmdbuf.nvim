@@ -8,7 +8,10 @@ Window.__index = Window
 
 function Window.open(buffer, created, layout, line, column)
   local origin_window_id = vim.api.nvim_get_current_win()
-  local window_id = layout:open()
+
+  local buffer_name = buffer:name()
+  local window_id = layout:open(buffer_name)
+
   buffer:set_to(window_id)
   _windows[window_id] = origin_window_id
 

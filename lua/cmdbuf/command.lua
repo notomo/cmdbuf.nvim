@@ -13,7 +13,7 @@ function ShowError.open(layout_opts, opts)
   end
 
   local buffer, created = require("cmdbuf.core.buffer").get_or_create(handler, opts.line)
-  local layout = require("cmdbuf.layout").new(layout_opts)
+  local layout = require("cmdbuf.layout").new(layout_opts, opts.reusable_window_ids or {})
   Window.open(buffer, created, layout, opts.line, opts.column)
 end
 
