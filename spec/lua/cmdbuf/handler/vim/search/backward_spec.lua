@@ -8,7 +8,7 @@ describe("vim/search/backward handler", function()
   it("can open a buffer", function()
     cmdbuf.open({ type = "vim/search/backward" })
 
-    assert.buffer("cmdbuf://vim/search/backward-buffer")
+    assert.buffer_name("cmdbuf://vim/search/backward-buffer")
     assert.filetype("")
   end)
 
@@ -19,7 +19,7 @@ describe("vim/search/backward handler", function()
     helper.set_lines([[target]])
     cmdbuf.execute({ quit = true })
 
-    assert.current_word("target")
+    assert.cursor_word("target")
     assert.equals("target", vim.fn.getreg("/"))
     assert.equals(1, vim.v.hlsearch)
     assert.equals(0, vim.v.searchforward)

@@ -15,15 +15,15 @@ describe("cmdbuf.nvim", function()
     cmdbuf.split_open()
 
     vim.cmd.wincmd("k")
-    assert.bufnr(origin)
+    assert.buffer_number(origin)
 
     vim.api.nvim_set_current_win(origin_win1)
     vim.cmd.wincmd("j")
-    assert.buffer("cmdbuf://vim/cmd-buffer")
+    assert.buffer_name("cmdbuf://vim/cmd-buffer")
 
     vim.api.nvim_set_current_win(origin_win2)
     vim.cmd.wincmd("j")
-    assert.buffer("cmdbuf://vim/cmd-buffer")
+    assert.buffer_name("cmdbuf://vim/cmd-buffer")
   end)
 
   it("can open with vsplit", function()
@@ -32,17 +32,17 @@ describe("cmdbuf.nvim", function()
     cmdbuf.vsplit_open()
 
     vim.cmd.wincmd("h")
-    assert.bufnr(origin)
+    assert.buffer_number(origin)
 
     vim.cmd.wincmd("l")
-    assert.buffer("cmdbuf://vim/cmd-buffer")
+    assert.buffer_name("cmdbuf://vim/cmd-buffer")
   end)
 
   it("can open in the new tab", function()
     cmdbuf.tab_open()
 
     assert.tab_count(2)
-    assert.buffer("cmdbuf://vim/cmd-buffer")
+    assert.buffer_name("cmdbuf://vim/cmd-buffer")
   end)
 
   it("fills the buffer with command history", function()
@@ -63,7 +63,7 @@ history2]])
 
     cmdbuf.open()
 
-    assert.bufnr(bufnr)
+    assert.buffer_number(bufnr)
   end)
 
   it("can quit after command execution in no split window", function()
@@ -113,8 +113,8 @@ history2]])
     cmdbuf.open({ line = cmd, column = #cmd })
 
     assert.current_line("tabedit")
-    assert.current_row(vim.fn.line("$"))
-    assert.current_col(#cmd)
+    assert.cursor_row(vim.fn.line("$"))
+    assert.cursor_column(#cmd)
   end)
 
   it("fires CmdbufNew on opening a new buffer", function()
@@ -182,7 +182,7 @@ history2]])
     cmdbuf.split_open()
     vim.cmd.quit()
 
-    assert.window(origin_win)
+    assert.window_id(origin_win)
   end)
 
   it("restores current window on executed", function()
@@ -194,7 +194,7 @@ history2]])
     helper.set_lines([[echomsg]])
     cmdbuf.execute({ quit = true })
 
-    assert.window(origin_win)
+    assert.window_id(origin_win)
   end)
 
   it("works wincmd", function()
@@ -207,7 +207,7 @@ history2]])
     helper.set_lines([[wincmd w]])
     cmdbuf.execute({ quit = true })
 
-    assert.window(target_win)
+    assert.window_id(target_win)
   end)
 
   it("restores current window even if cmdbuf buffers are opened nested", function()
@@ -218,10 +218,10 @@ history2]])
     cmdbuf.split_open()
 
     cmdbuf.execute({ quit = true })
-    assert.window(first_restored_win)
+    assert.window_id(first_restored_win)
 
     cmdbuf.execute({ quit = true })
-    assert.window(second_restored_win)
+    assert.window_id(second_restored_win)
   end)
 
   it("can reuse the same type window", function()
@@ -234,14 +234,14 @@ history2]])
 
     cmdbuf.open({ reusable_window_ids = vim.api.nvim_tabpage_list_wins(0) })
 
-    assert.window(window_id)
-    assert.buffer("cmdbuf://vim/cmd-buffer")
+    assert.window_id(window_id)
+    assert.buffer_name("cmdbuf://vim/cmd-buffer")
   end)
 
   it("ignores reusable windows when there is no the same type window", function()
     cmdbuf.split_open(vim.o.cmdwinheight, { reusable_window_ids = vim.api.nvim_tabpage_list_wins(0) })
 
     assert.window_count(2)
-    assert.buffer("cmdbuf://vim/cmd-buffer")
+    assert.buffer_name("cmdbuf://vim/cmd-buffer")
   end)
 end)

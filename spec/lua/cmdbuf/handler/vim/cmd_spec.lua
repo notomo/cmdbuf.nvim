@@ -10,9 +10,9 @@ describe("vim/cmd handler", function()
 
     cmdbuf.open()
 
-    assert.buffer("cmdbuf://vim/cmd-buffer")
+    assert.buffer_name("cmdbuf://vim/cmd-buffer")
     assert.filetype("vim")
-    assert.no.bufnr(origin)
+    assert.no.buffer_number(origin)
   end)
 
   it("can execute current line command", function()

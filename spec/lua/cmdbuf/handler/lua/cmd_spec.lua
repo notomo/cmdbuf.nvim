@@ -8,7 +8,7 @@ describe("lua/cmd handler", function()
   it("can open a lua command buffer", function()
     cmdbuf.open({ type = "lua/cmd" })
 
-    assert.buffer("cmdbuf://lua/cmd-buffer")
+    assert.buffer_name("cmdbuf://lua/cmd-buffer")
     assert.filetype("lua")
   end)
 
