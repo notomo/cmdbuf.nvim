@@ -10,7 +10,7 @@ describe("vim/cmd handler", function()
 
     cmdbuf.open()
 
-    assert.buffer_name("cmdbuf://vim/cmd-buffer")
+    assert.buffer_full_name("cmdbuf://vim/cmd-buffer")
     assert.filetype("vim")
     assert.no.buffer_number(origin)
   end)

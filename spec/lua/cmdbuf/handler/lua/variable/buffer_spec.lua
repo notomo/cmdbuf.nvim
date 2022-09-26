@@ -10,7 +10,7 @@ describe("lua/variable/buffer handler", function()
   it("can open a lua command buffer", function()
     cmdbuf.open({ type = typ })
 
-    assert.buffer_name("cmdbuf://lua/variable/buffer-buffer")
+    assert.buffer_full_name("cmdbuf://lua/variable/buffer-buffer")
     assert.filetype("lua")
   end)
 

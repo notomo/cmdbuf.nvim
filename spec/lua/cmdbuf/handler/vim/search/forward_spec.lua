@@ -8,7 +8,7 @@ describe("vim/search/forward handler", function()
   it("can open a buffer", function()
     cmdbuf.open({ type = "vim/search/forward" })
 
-    assert.buffer_name("cmdbuf://vim/search/forward-buffer")
+    assert.buffer_full_name("cmdbuf://vim/search/forward-buffer")
     assert.filetype("")
   end)
 

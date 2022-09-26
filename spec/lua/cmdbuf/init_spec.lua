@@ -19,11 +19,11 @@ describe("cmdbuf.nvim", function()
 
     vim.api.nvim_set_current_win(origin_win1)
     vim.cmd.wincmd("j")
-    assert.buffer_name("cmdbuf://vim/cmd-buffer")
+    assert.buffer_full_name("cmdbuf://vim/cmd-buffer")
 
     vim.api.nvim_set_current_win(origin_win2)
     vim.cmd.wincmd("j")
-    assert.buffer_name("cmdbuf://vim/cmd-buffer")
+    assert.buffer_full_name("cmdbuf://vim/cmd-buffer")
   end)
 
   it("can open with vsplit", function()
@@ -35,14 +35,14 @@ describe("cmdbuf.nvim", function()
     assert.buffer_number(origin)
 
     vim.cmd.wincmd("l")
-    assert.buffer_name("cmdbuf://vim/cmd-buffer")
+    assert.buffer_full_name("cmdbuf://vim/cmd-buffer")
   end)
 
   it("can open in the new tab", function()
     cmdbuf.tab_open()
 
     assert.tab_count(2)
-    assert.buffer_name("cmdbuf://vim/cmd-buffer")
+    assert.buffer_full_name("cmdbuf://vim/cmd-buffer")
   end)
 
   it("fills the buffer with command history", function()
@@ -235,13 +235,13 @@ history2]])
     cmdbuf.open({ reusable_window_ids = vim.api.nvim_tabpage_list_wins(0) })
 
     assert.window_id(window_id)
-    assert.buffer_name("cmdbuf://vim/cmd-buffer")
+    assert.buffer_full_name("cmdbuf://vim/cmd-buffer")
   end)
 
   it("ignores reusable windows when there is no the same type window", function()
     cmdbuf.split_open(vim.o.cmdwinheight, { reusable_window_ids = vim.api.nvim_tabpage_list_wins(0) })
 
     assert.window_count(2)
-    assert.buffer_name("cmdbuf://vim/cmd-buffer")
+    assert.buffer_full_name("cmdbuf://vim/cmd-buffer")
   end)
 end)

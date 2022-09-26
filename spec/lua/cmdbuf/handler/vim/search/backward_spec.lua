@@ -8,7 +8,7 @@ describe("vim/search/backward handler", function()
   it("can open a buffer", function()
     cmdbuf.open({ type = "vim/search/backward" })
 
-    assert.buffer_name("cmdbuf://vim/search/backward-buffer")
+    assert.buffer_full_name("cmdbuf://vim/search/backward-buffer")
     assert.filetype("")
   end)
 
