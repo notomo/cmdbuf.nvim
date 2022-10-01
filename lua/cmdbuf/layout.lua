@@ -5,8 +5,8 @@ function Layouts.no() end
 function Layouts.vsplit(width)
   vim.validate({ width = { width, "number", true } })
   return function()
-    vim.cmd("vsplit")
-    vim.cmd("wincmd l")
+    vim.cmd.vsplit()
+    vim.cmd.wincmd("l")
     if width ~= nil then
       vim.api.nvim_win_set_width(0, width)
     end
@@ -16,8 +16,8 @@ end
 function Layouts.split(height)
   vim.validate({ height = { height, "number", true } })
   return function()
-    vim.cmd("botright split")
-    vim.cmd("wincmd j")
+    vim.cmd.split({ mods = { split = "botright" } })
+    vim.cmd.wincmd("j")
     if height ~= nil then
       vim.api.nvim_win_set_height(0, height)
     end
@@ -25,7 +25,7 @@ function Layouts.split(height)
 end
 
 function Layouts.tab()
-  vim.cmd("tabedit")
+  vim.cmd.tabedit()
 end
 
 local Layout = {}

@@ -80,7 +80,7 @@ end
 function Window.close(self)
   local window_count = #vim.api.nvim_tabpage_list_wins(0)
   if window_count == 1 then
-    return vim.cmd("buffer #")
+    return vim.cmd.buffer("#")
   end
 
   self:on_closed()
