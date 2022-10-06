@@ -1,4 +1,4 @@
-local helper = require("cmdbuf.lib.testlib.helper")
+local helper = require("cmdbuf.test.helper")
 local cmdbuf = helper.require("cmdbuf")
 
 describe("vim/cmd handler", function()
