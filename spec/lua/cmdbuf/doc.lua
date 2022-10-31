@@ -5,7 +5,7 @@ local example_path = ("./spec/lua/%s/example.lua"):format(plugin_name)
 dofile(example_path)
 
 require("genvdoc").generate(plugin_name .. ".nvim", {
-  sources = { { name = "lua", pattern = ("lua/%s/init.lua"):format(plugin_name) } },
+  source = { patterns = { ("lua/%s/init.lua"):format(plugin_name) } },
   chapters = {
     {
       name = function(group)
