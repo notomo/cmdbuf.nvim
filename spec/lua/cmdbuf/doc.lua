@@ -66,7 +66,7 @@ CmdbufNew                                              *cmdbuf.nvim-CmdbufNew*
     {
       name = "EXAMPLES",
       body = function()
-        return require("genvdoc.util").help_code_block_from_file(example_path)
+        return require("genvdoc.util").help_code_block_from_file(example_path, { language = "lua" })
       end,
     },
   },

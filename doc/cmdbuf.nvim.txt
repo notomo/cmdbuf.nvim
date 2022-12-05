@@ -69,7 +69,7 @@ CmdbufNew                                              *cmdbuf.nvim-CmdbufNew*
 ==============================================================================
 EXAMPLES                                                *cmdbuf.nvim-EXAMPLES*
 
->
+>lua
   vim.keymap.set("n", "q:", function()
     require("cmdbuf").split_open(vim.o.cmdwinheight)
   end)
