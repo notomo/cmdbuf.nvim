@@ -87,9 +87,9 @@ function Buffer.execute(self, row, close_window)
   close_window()
 
   if line == "" then
-    return nil
+    return
   end
-  return self._handler:execute(line)
+  self._handler:execute(line)
 end
 
 function Buffer.delete_range(self, s, e)

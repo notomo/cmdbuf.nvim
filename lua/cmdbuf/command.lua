@@ -1,15 +1,16 @@
 local Window = require("cmdbuf.core.window")
-local ShowError = require("cmdbuf.vendor.misclib.error_handler").for_show_error()
 local vim = vim
 
-function ShowError.open(layout_opts, opts)
+local M = {}
+
+function M.open(layout_opts, opts)
   vim.validate({ layout_opts = { layout_opts, "table" }, opts = { opts, "table", true } })
   opts = opts or {}
 
   local typ = opts.type or "vim/cmd"
   local handler, err = require("cmdbuf.handler").new(typ)
   if err then
-    return err
+    require("cmdbuf.vendor.misclib.message").error(err)
   end
 
   local buffer, created = require("cmdbuf.core.buffer").get_or_create(handler, opts.line)
@@ -17,18 +18,18 @@ function ShowError.open(layout_opts, opts)
   Window.open(buffer, created, layout, opts.line, opts.column)
 end
 
-function ShowError.execute(opts)
+function M.execute(opts)
   vim.validate({ opts = { opts, "table", true } })
   opts = opts or {}
-  return Window.current():execute(opts.quit)
+  Window.current():execute(opts.quit)
 end
 
-function ShowError.delete(range)
-  return Window.current():delete_range(range)
+function M.delete(range)
+  Window.current():delete_range(range)
 end
 
-function ShowError.on_win_closed(window_id)
-  return Window.get(window_id):on_closed()
+function M.on_win_closed(window_id)
+  Window.get(window_id):on_closed()
 end
 
-return ShowError:methods()
+return M

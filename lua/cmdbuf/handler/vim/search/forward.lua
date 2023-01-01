@@ -37,10 +37,12 @@ function M.execute(self, line)
   vim.cmd.let({ args = { "v:searchforward", "=", self.searchforward } })
   local ok, result = pcall(vim.fn.search, line, self.flags)
   if not ok then
-    return messagelib.user_vim_error(result)
+    messagelib.user_vim_error(result)
+    return
   end
   if result == 0 then
-    return messagelib.user_error("E486: Pattern not found: " .. line)
+    messagelib.user_error("E486: Pattern not found: " .. line)
+    return
   end
 end
 

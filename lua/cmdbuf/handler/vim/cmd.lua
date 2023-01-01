@@ -30,7 +30,8 @@ end
 function M.execute(_, line)
   local ok, result = pcall(vim.cmd, line)
   if not ok then
-    return messagelib.user_vim_error(result)
+    messagelib.user_vim_error(result)
+    return
   end
 end
 

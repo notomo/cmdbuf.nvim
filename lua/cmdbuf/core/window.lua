@@ -74,7 +74,7 @@ function Window.delete_range(self, range)
     e = range[2]
   end
 
-  return self._buffer:delete_range(s, e)
+  self._buffer:delete_range(s, e)
 end
 
 function Window.close(self)

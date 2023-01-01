@@ -43,7 +43,8 @@ end
 function M.execute(self, line)
   local ok, msg = pcall(vim.cmd, self._lua(line))
   if not ok then
-    return messagelib.user_vim_error(msg)
+    messagelib.user_vim_error(msg)
+    return
   end
 end
 
