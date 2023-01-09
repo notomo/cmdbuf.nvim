@@ -48,6 +48,7 @@ OPTIONS                                                  *cmdbuf.nvim-OPTIONS*
 
 - {column} (number | nil): initial cursor column in the buffer.
 - {line} (number | nil): set this string to the bottom line in the buffer.
+- {open_window} (function | nil): The window after executing this function is used.
 - {reusable_window_ids} (list | nil): force to reuse the window that has the same buffer name. (default: {})
 - {type} (string | nil): handler type (default = "vim/cmd")
   - `vim/cmd`: |q:| alternative

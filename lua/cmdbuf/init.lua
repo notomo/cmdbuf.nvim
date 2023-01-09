@@ -3,27 +3,34 @@ local M = {}
 --- Open a command buffer.
 --- @param opts table|nil: |cmdbuf.nvim-open-opts|
 function M.open(opts)
-  require("cmdbuf.command").open({}, opts)
+  opts = opts or {}
+  require("cmdbuf.command").open(opts)
 end
 
 --- Open a command buffer with `split`.
 --- @param height number|nil: window height
 --- @param opts table|nil: |cmdbuf.nvim-open-opts|
 function M.split_open(height, opts)
-  require("cmdbuf.command").open({ type = "split", height = height }, opts)
+  opts = opts or {}
+  opts.open_window = opts.open_window or require("cmdbuf.layout").split_layout(height)
+  require("cmdbuf.command").open(opts)
 end
 
 --- Open a command buffer with `vsplit`.
 --- @param width number|nil: window width
 --- @param opts table|nil: |cmdbuf.nvim-open-opts|
 function M.vsplit_open(width, opts)
-  require("cmdbuf.command").open({ type = "vsplit", width = width }, opts)
+  opts = opts or {}
+  opts.open_window = opts.open_window or require("cmdbuf.layout").vsplit_layout(width)
+  require("cmdbuf.command").open(opts)
 end
 
 --- Open a command buffer in new tab.
 --- @param opts table|nil: |cmdbuf.nvim-open-opts|
 function M.tab_open(opts)
-  require("cmdbuf.command").open({ type = "tab" }, opts)
+  opts = opts or {}
+  opts.open_window = opts.open_window or require("cmdbuf.layout").tab_layout()
+  require("cmdbuf.command").open(opts)
 end
 
 --- Execute the current line command.

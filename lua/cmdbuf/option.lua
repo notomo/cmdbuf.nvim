@@ -5,10 +5,10 @@ M.default_open_opts = {
   line = nil,
   column = nil,
   reusable_window_ids = {},
+  open_window = function() end,
 }
 function M.new_open_opts(raw_opts)
-  vim.validate({ raw_opts = { raw_opts, "table", true } })
-  raw_opts = raw_opts or {}
+  vim.validate({ raw_opts = { raw_opts, "table" } })
   return vim.tbl_deep_extend("force", M.default_open_opts, raw_opts)
 end
 

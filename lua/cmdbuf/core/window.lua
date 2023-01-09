@@ -6,11 +6,11 @@ local _windows = {}
 local Window = {}
 Window.__index = Window
 
-function Window.open(buffer, created, layout, line, column)
+function Window.open(buffer, created, open_window, reusable_window_ids, line, column)
   local origin_window_id = vim.api.nvim_get_current_win()
 
   local buffer_name = buffer:name()
-  local window_id = layout:open(buffer_name)
+  local window_id = require("cmdbuf.layout").open(open_window, reusable_window_ids, buffer_name)
 
   buffer:set_to(window_id)
   _windows[window_id] = origin_window_id

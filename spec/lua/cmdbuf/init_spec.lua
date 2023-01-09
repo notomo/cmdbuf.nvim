@@ -244,4 +244,28 @@ history2]])
     assert.window_count(2)
     assert.buffer_full_name("cmdbuf://vim/cmd-buffer")
   end)
+
+  it("can custom open", function()
+    vim.fn.histadd("cmd", "history1")
+
+    local window_id
+    cmdbuf.open({
+      open_window = function()
+        local bufnr = vim.api.nvim_create_buf(false, true)
+        window_id = vim.api.nvim_open_win(bufnr, true, {
+          width = 50,
+          height = 10,
+          relative = "editor",
+          row = 10,
+          col = 10,
+          focusable = true,
+          external = false,
+          style = "minimal",
+        })
+      end,
+    })
+
+    assert.window_id(window_id)
+    assert.exists_pattern("history1")
+  end)
 end)
