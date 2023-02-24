@@ -7,59 +7,59 @@ open({opts})                                                   *cmdbuf.open()*
   Open a command buffer.
 
   Parameters: ~
-    {opts} (table|nil) |cmdbuf.nvim-open-opts|
+    {opts} (CmdbufOpenOption?) |CmdbufOpenOption|
 
 split_open({height}, {opts})                             *cmdbuf.split_open()*
   Open a command buffer with `split`.
 
   Parameters: ~
-    {height} (number|nil) window height
-    {opts} (table|nil) |cmdbuf.nvim-open-opts|
+    {height} (integer|nil) window height
+    {opts} (CmdbufOpenOption?) |CmdbufOpenOption|
 
 vsplit_open({width}, {opts})                            *cmdbuf.vsplit_open()*
   Open a command buffer with `vsplit`.
 
   Parameters: ~
-    {width} (number|nil) window width
-    {opts} (table|nil) |cmdbuf.nvim-open-opts|
+    {width} (integer|nil) window width
+    {opts} (CmdbufOpenOption?) |CmdbufOpenOption|
 
 tab_open({opts})                                           *cmdbuf.tab_open()*
   Open a command buffer in new tab.
 
   Parameters: ~
-    {opts} (table|nil) |cmdbuf.nvim-open-opts|
+    {opts} (CmdbufOpenOption?) |CmdbufOpenOption|
 
 execute({opts})                                             *cmdbuf.execute()*
   Execute the current line command.
 
   Parameters: ~
-    {opts} (table|nil) |cmdbuf.nvim-open-opts|
+    {opts} (CmdbufExecuteOption?) |CmdbufExecuteOption|
 
 delete({range})                                              *cmdbuf.delete()*
   Delete current line (or given range) from command history
 
   Parameters: ~
-    {range} (table|nil) 1-based range {start number, end number}
+    {range} (integer[]?) 1-based range {start number, end number}
 
 ==============================================================================
-OPTIONS                                                  *cmdbuf.nvim-OPTIONS*
+STRUCTURE                                              *cmdbuf.nvim-STRUCTURE*
 
-|cmdbuf.open()| options                                *cmdbuf.nvim-open-opts*
+CmdbufOpenOption                                            *CmdbufOpenOption*
 
-- {column} (number | nil): initial cursor column in the buffer.
-- {line} (number | nil): set this string to the bottom line in the buffer.
-- {open_window} (function | nil): The window after executing this function is used.
-- {reusable_window_ids} (list | nil): force to reuse the window that has the same buffer name. (default: {})
-- {type} (string | nil): handler type (default = "vim/cmd")
-  - `vim/cmd`: |q:| alternative
-  - `vim/sesarch/forward`: |q/| alternative
-  - `vim/sesarch/backward`: |q?| alternative
-  - `lua/cmd`: |q:| alternative for lua command
-  - `lua/variable/buffer`: buffer variable and command
+- {column} (integer?) initial cursor column in the buffer.
+- {line} (integer?) set this string to the bottom line in the buffer.
+- {open_window} (fun()?) The window after executing this function is used.
+- {reusable_window_ids} (integer[]?) force to reuse the window that has the same buffer name. (default: {})
+- {type} (("vim/cmd"|"vim/sesarch/forward"|"vim/sesarch/backward"|"lua/cmd"|"lua/variable/buffer")) handler type (default = "vim/cmd")
+   - `vim/cmd`: |q:| alternative
+   - `vim/sesarch/forward`: |q/| alternative
+   - `vim/sesarch/backward`: |q?| alternative
+   - `lua/cmd`: |q:| alternative for lua command
+   - `lua/variable/buffer`: buffer variable and command
 
-|cmdbuf.execute()| options                          *cmdbuf.nvim-execute-opts*
+CmdbufExecuteOption                                      *CmdbufExecuteOption*
 
-- {quit} (boolean | nil): whether quit the window after execution.
+- {quit} (boolean?) whether quit the window after execution.
 
 ==============================================================================
 AUTOCOMMANDS                                        *cmdbuf.nvim-AUTOCOMMANDS*
