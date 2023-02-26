@@ -2,7 +2,7 @@ local M = {}
 
 --- @class CmdbufOpenOption
 --- @field column integer? initial cursor column in the buffer.
---- @field line integer? set this string to the bottom line in the buffer.
+--- @field line string? set this string to the bottom line in the buffer.
 --- @field open_window fun()? The window after executing this function is used.
 --- @field reusable_window_ids integer[]? force to reuse the window that has the same buffer name. (default: {})
 --- @field type ("vim/cmd"|"vim/sesarch/forward"|"vim/sesarch/backward"|"lua/cmd"|"lua/variable/buffer") handler type (default = "vim/cmd")
