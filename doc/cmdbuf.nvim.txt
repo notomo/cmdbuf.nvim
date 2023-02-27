@@ -50,12 +50,16 @@ CmdbufOpenOption                                            *CmdbufOpenOption*
 - {line} (string?) set this string to the bottom line in the buffer.
 - {open_window} (fun()?) The window after executing this function is used.
 - {reusable_window_ids} (integer[]?) force to reuse the window that has the same buffer name. (default: {})
-- {type} (("vim/cmd"|"vim/sesarch/forward"|"vim/sesarch/backward"|"lua/cmd"|"lua/variable/buffer")) handler type (default = "vim/cmd")
-   - `vim/cmd`: |q:| alternative
-   - `vim/sesarch/forward`: |q/| alternative
-   - `vim/sesarch/backward`: |q?| alternative
-   - `lua/cmd`: |q:| alternative for lua command
-   - `lua/variable/buffer`: buffer variable and command
+- {type} (CmdbufHandlerType?) (default = "vim/cmd") |CmdbufHandlerType|
+
+CmdbufHandlerType                                          *CmdbufHandlerType*
+  = "vim/cmd" | "vim/sesarch/forward" | "vim/sesarch/backward" | "lua/cmd" | "lua/variable/buffer"
+
+- "vim/cmd": |q:| alternative
+- "vim/sesarch/forward": |q/| alternative
+- "vim/sesarch/backward": |q?| alternative
+- "lua/cmd": |q:| alternative for lua command
+- "lua/variable/buffer": buffer variable and command
 
 CmdbufExecuteOption                                      *CmdbufExecuteOption*
 

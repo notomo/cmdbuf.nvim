@@ -5,12 +5,14 @@ local M = {}
 --- @field line string? set this string to the bottom line in the buffer.
 --- @field open_window fun()? The window after executing this function is used.
 --- @field reusable_window_ids integer[]? force to reuse the window that has the same buffer name. (default: {})
---- @field type ("vim/cmd"|"vim/sesarch/forward"|"vim/sesarch/backward"|"lua/cmd"|"lua/variable/buffer") handler type (default = "vim/cmd")
----  - `vim/cmd`: |q:| alternative
----  - `vim/sesarch/forward`: |q/| alternative
----  - `vim/sesarch/backward`: |q?| alternative
----  - `lua/cmd`: |q:| alternative for lua command
----  - `lua/variable/buffer`: buffer variable and command
+--- @field type CmdbufHandlerType? (default = "vim/cmd") |CmdbufHandlerType|
+
+--- @alias CmdbufHandlerType
+--- | '"vim/cmd"' # |q:| alternative
+--- | '"vim/sesarch/forward"' # |q/| alternative
+--- | '"vim/sesarch/backward"' # |q?| alternative
+--- | '"lua/cmd"' # |q:| alternative for lua command
+--- | '"lua/variable/buffer"' # buffer variable and command
 
 --- Open a command buffer.
 --- @param opts CmdbufOpenOption?: |CmdbufOpenOption|
