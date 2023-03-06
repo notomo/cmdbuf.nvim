@@ -24,6 +24,7 @@ vim.api.nvim_create_autocmd({ "User" }, {
   group = vim.api.nvim_create_augroup("cmdbuf_setting", {}),
   pattern = { "CmdbufNew" },
   callback = function()
+    vim.bo.bufhidden = "wipe" -- if you don't need previous opened buffer state
     vim.keymap.set("n", "q", [[<Cmd>quit<CR>]], { nowait = true, buffer = true })
     vim.keymap.set("n", "dd", [[<Cmd>lua require('cmdbuf').delete()<CR>]], { buffer = true })
   end,
