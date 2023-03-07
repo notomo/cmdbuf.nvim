@@ -2,7 +2,7 @@ local M = {}
 
 --- Find specified module.
 --- @param path string: for `require()` argument
---- @return any: If the module is not found, return nil.
+--- @return any # If the module is not found, return nil.
 function M.find(path)
   path = path:gsub("/", ".")
   local ok, result = pcall(require, path)
