@@ -53,13 +53,14 @@ CmdbufOpenOption                                            *CmdbufOpenOption*
 - {type} (CmdbufHandlerType?) (default = "vim/cmd") |CmdbufHandlerType|
 
 CmdbufHandlerType                                          *CmdbufHandlerType*
-  = "vim/cmd" | "vim/sesarch/forward" | "vim/sesarch/backward" | "lua/cmd" | "lua/variable/buffer"
+  = "vim/cmd" | "vim/sesarch/forward" | "vim/sesarch/backward" | "lua/cmd" | "lua/variable/buffer" | "lua/variable/global"
 
 - "vim/cmd": |q:| alternative
 - "vim/sesarch/forward": |q/| alternative
 - "vim/sesarch/backward": |q?| alternative
 - "lua/cmd": |q:| alternative for lua command
 - "lua/variable/buffer": buffer variable and command
+- "lua/variable/global": global variable and command
 
 CmdbufExecuteOption                                      *CmdbufExecuteOption*
 

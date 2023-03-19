@@ -13,6 +13,7 @@ local M = {}
 --- | '"vim/sesarch/backward"' # |q?| alternative
 --- | '"lua/cmd"' # |q:| alternative for lua command
 --- | '"lua/variable/buffer"' # buffer variable and command
+--- | '"lua/variable/global"' # global variable and command
 
 --- Open a command buffer.
 --- @param opts CmdbufOpenOption?: |CmdbufOpenOption|
