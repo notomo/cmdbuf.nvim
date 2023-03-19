@@ -7,14 +7,14 @@ describe("lua/variable/buffer handler", function()
 
   local typ = "lua/variable/buffer"
 
-  it("can open a lua command buffer", function()
+  it("can open a lua buffer variable buffer", function()
     cmdbuf.open({ type = typ })
 
     assert.buffer_full_name("cmdbuf://lua/variable/buffer-buffer")
     assert.filetype("lua")
   end)
 
-  it("can execute current line as buffer set commands", function()
+  it("can execute current line as buffer variable set command", function()
     cmdbuf.open({ type = typ })
     helper.set_lines([[execute_test = 8888]])
 
