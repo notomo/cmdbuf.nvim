@@ -1,16 +1,4 @@
-PLUGIN_NAME:=$(basename $(notdir $(abspath .)))
-SPEC_DIR:=./spec/lua/${PLUGIN_NAME}
+include spec/.shared/neovim-plugin.mk
 
-test:
-	vusted --shuffle
-.PHONY: test
-
-doc:
-	rm -f ./doc/${PLUGIN_NAME}.nvim.txt ./README.md
-	PLUGIN_NAME=${PLUGIN_NAME} nvim --headless -i NONE -n +"lua dofile('./spec/lua/${PLUGIN_NAME}/doc.lua')" +"quitall!"
-	cat ./doc/${PLUGIN_NAME}.nvim.txt ./README.md
-.PHONY: doc
-
-vendor:
-	nvim --headless -i NONE -n +"lua require('vendorlib').install('${PLUGIN_NAME}', '${SPEC_DIR}/vendorlib.lua')" +"quitall!"
-.PHONY: vendor
+spec/.shared/neovim-plugin.mk:
+	git clone https://github.com/notomo/workflow.git --depth 1 spec/.shared
