@@ -3,7 +3,7 @@ vim.keymap.set("n", "q:", function()
 end)
 vim.keymap.set("c", "<C-f>", function()
   require("cmdbuf").split_open(vim.o.cmdwinheight, { line = vim.fn.getcmdline(), column = vim.fn.getcmdpos() })
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-c>", true, false, true), "n", true)
+  vim.api.nvim_feedkeys(vim.keycode("<C-c>"), "n", true)
 end)
 
 -- Custom buffer mappings
