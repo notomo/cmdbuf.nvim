@@ -3,11 +3,11 @@ local _buffers = {}
 local Buffer = {}
 Buffer.__index = Buffer
 
-function Buffer.get_or_create(handler, line)
+function Buffer.get_or_create(handler, line, n)
   local name = ("cmdbuf://%s-buffer"):format(handler.name)
   local bufnr = vim.fn.bufnr(("^%s$"):format(name))
   if bufnr == -1 then
-    return Buffer.create(handler, name, line), true
+    return Buffer.create(handler, name, line, n), true
   end
 
   -- NOTE: the buffer is empty if it was closed by `:quit!`
@@ -19,13 +19,13 @@ function Buffer.get_or_create(handler, line)
   return Buffer.get(bufnr), false
 end
 
-function Buffer.create(handler, name, line)
+function Buffer.create(handler, name, line, n)
   local bufnr = vim.api.nvim_create_buf(false, true)
   local tbl = { _bufnr = bufnr, _handler = handler }
   local self = setmetatable(tbl, Buffer)
   _buffers[bufnr] = self
 
-  self:load(line)
+  self:load(line, n)
 
   vim.api.nvim_buf_set_name(bufnr, name)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<CR>", [[<Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
@@ -34,7 +34,7 @@ function Buffer.create(handler, name, line)
   vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
     buffer = bufnr,
     callback = function()
-      self:load()
+      self:load(n)
     end,
   })
   vim.api.nvim_create_autocmd({ "WinClosed" }, {
@@ -68,10 +68,10 @@ function Buffer.current()
   return Buffer.get(bufnr)
 end
 
-function Buffer.load(self, line)
+function Buffer.load(self, line, n)
   vim.validate({ line = { line, "string", true } })
 
-  local lines = self._handler:histories()
+  local lines = self._handler:histories(n)
   table.insert(lines, line or "")
   vim.api.nvim_buf_set_lines(self._bufnr, 0, -1, false, lines)
 

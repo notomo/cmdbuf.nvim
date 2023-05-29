@@ -10,7 +10,7 @@ function M.open(opts)
     require("cmdbuf.vendor.misclib.message").error(err)
   end
 
-  local buffer, created = require("cmdbuf.core.buffer").get_or_create(handler, opts.line)
+  local buffer, created = require("cmdbuf.core.buffer").get_or_create(handler, opts.line, opts.n)
   Window.open(buffer, created, opts.open_window, opts.reusable_window_ids, opts.line, opts.column)
 end
 
