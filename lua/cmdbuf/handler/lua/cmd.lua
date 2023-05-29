@@ -12,7 +12,7 @@ function M._lua(cmd)
   return "lua " .. cmd
 end
 
-function M.histories()
+function M.histories(_, n)
   return historylib.filter_map("cmd", function(cmd)
     do
       local s, e = cmd:find("^%s*lua%s+")
@@ -27,7 +27,7 @@ function M.histories()
       end
     end
     return nil
-  end)
+  end, n)
 end
 
 function M.add_history(self, line)

@@ -12,7 +12,7 @@ function M._lua(cmd)
   return "lua vim.g." .. cmd
 end
 
-function M.histories(_)
+function M.histories(_, n)
   local cmds = historylib.filter_map("cmd", function(cmd)
     local s, e = cmd:find("^%s*lua%s+vim%.g%.")
     if not s then
@@ -24,7 +24,7 @@ function M.histories(_)
       return nil
     end
     return line
-  end)
+  end, n)
 
   local prefix_length = #"g:" + 1
   local keys = vim.fn.getcompletion("g:*", "var")

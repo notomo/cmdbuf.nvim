@@ -7,13 +7,13 @@ function M.new()
   return setmetatable({}, M)
 end
 
-function M.histories()
+function M.histories(_, n)
   return historylib.filter_map("input", function(input)
     if input == "" then
       return nil
     end
     return input
-  end)
+  end, n)
 end
 
 function M.add_history(_, line)

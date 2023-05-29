@@ -13,7 +13,7 @@ function M._lua(cmd)
   return "lua vim.b." .. cmd
 end
 
-function M.histories(self)
+function M.histories(self, n)
   if not vim.api.nvim_buf_is_valid(self._bufnr) then
     return {}
   end
@@ -29,7 +29,7 @@ function M.histories(self)
       return nil
     end
     return line
-  end)
+  end, n)
 
   local prefix_length = #"b:" + 1
   local keys = vim.api.nvim_buf_call(self._bufnr, function()

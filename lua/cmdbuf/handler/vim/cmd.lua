@@ -8,13 +8,13 @@ function M.new()
   return setmetatable({}, M)
 end
 
-function M.histories()
+function M.histories(_, n)
   return historylib.filter_map("cmd", function(cmd)
     if cmd == "" then
       return nil
     end
     return cmd
-  end)
+  end, n)
 end
 
 function M.add_history(_, line)
