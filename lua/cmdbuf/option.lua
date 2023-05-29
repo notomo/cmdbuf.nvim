@@ -6,6 +6,7 @@ M.default_open_opts = {
   column = nil,
   reusable_window_ids = {},
   open_window = function() end,
+  n = nil,
 }
 function M.new_open_opts(raw_opts)
   vim.validate({ raw_opts = { raw_opts, "table" } })
