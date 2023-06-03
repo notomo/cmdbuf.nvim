@@ -9,8 +9,8 @@ local M = {}
 
 --- @alias CmdbufHandlerType
 --- | '"vim/cmd"' # |q:| alternative
---- | '"vim/sesarch/forward"' # |q/| alternative
---- | '"vim/sesarch/backward"' # |q?| alternative
+--- | '"vim/search/forward"' # |q/| alternative
+--- | '"vim/search/backward"' # |q?| alternative
 --- | '"vim/input"' # show input history
 --- | '"lua/cmd"' # |q:| alternative for lua command
 --- | '"lua/variable/buffer"' # buffer variable and command
