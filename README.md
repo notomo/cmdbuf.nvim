@@ -23,10 +23,16 @@ end)
 vim.api.nvim_create_autocmd({ "User" }, {
   group = vim.api.nvim_create_augroup("cmdbuf_setting", {}),
   pattern = { "CmdbufNew" },
-  callback = function()
+  callback = function(args)
     vim.bo.bufhidden = "wipe" -- if you don't need previous opened buffer state
     vim.keymap.set("n", "q", [[<Cmd>quit<CR>]], { nowait = true, buffer = true })
     vim.keymap.set("n", "dd", [[<Cmd>lua require('cmdbuf').delete()<CR>]], { buffer = true })
+
+    -- you can filter buffer lines
+    local lines = vim.tbl_filter(function(line)
+      return line ~= "q"
+    end, vim.api.nvim_buf_get_lines(args.buf, 0, -1, false))
+    vim.api.nvim_buf_set_lines(args.buf, 0, -1, false, lines)
   end,
 })
 
