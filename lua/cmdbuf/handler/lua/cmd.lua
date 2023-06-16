@@ -15,15 +15,15 @@ end
 function M.histories()
   return historylib.filter_map("cmd", function(cmd)
     do
-      local s, e = cmd:find("^%s*lua%s+")
+      local s, e = cmd:find("^%s*lua%s*=?")
       if s then
         return cmd:sub(e + 1)
       end
     end
     do
-      local s, e = cmd:find("^%s*lua%=")
+      local s, e = cmd:find("^%s*=")
       if s then
-        return cmd:sub(e)
+        return cmd:sub(e + 1)
       end
     end
     return nil
