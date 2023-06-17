@@ -1,8 +1,10 @@
 local M = {}
 
-function M.delete(name, str)
-  local pattern = ("^%s$"):format(vim.fn.escape(str, "[]\\*~"))
-  vim.fn.histdel(name, pattern)
+function M.delete(name, str, prefix)
+  prefix = prefix or ""
+  local pattern = ("^%s%s$"):format(prefix, vim.fn.escape(str, "[]\\*~"))
+  local result = vim.fn.histdel(name, pattern)
+  return result == 1
 end
 
 function M.filter_map(name, f)

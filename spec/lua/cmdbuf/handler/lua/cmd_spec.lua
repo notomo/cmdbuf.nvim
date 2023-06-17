@@ -52,6 +52,30 @@ describe("lua/cmd handler", function()
     assert.no.exists_pattern("target_lua_cmd")
   end)
 
+  it("can delete a lua= command from history", function()
+    vim.fn.histadd("cmd", [[lua=vim.cmd.target_lua_cmd()]])
+
+    cmdbuf.open({ type = "lua/cmd" })
+    helper.search("target_lua_cmd")
+    cmdbuf.delete()
+    assert.no.exists_pattern("target_lua_cmd")
+
+    vim.cmd.edit({ bang = true })
+    assert.no.exists_pattern("target_lua_cmd")
+  end)
+
+  it("can delete a = command from history", function()
+    vim.fn.histadd("cmd", [[=vim.cmd.target_lua_cmd()]])
+
+    cmdbuf.open({ type = "lua/cmd" })
+    helper.search("target_lua_cmd")
+    cmdbuf.delete()
+    assert.no.exists_pattern("target_lua_cmd")
+
+    vim.cmd.edit({ bang = true })
+    assert.no.exists_pattern("target_lua_cmd")
+  end)
+
   it("lists including lua= command", function()
     vim.fn.histadd("cmd", [[lua="equal_test"]])
 
