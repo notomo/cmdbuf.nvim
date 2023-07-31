@@ -34,18 +34,20 @@ function M.add_history(self, line)
   vim.fn.histadd("cmd", self._lua(line))
 end
 
+local _delete_history = function(line)
+  if historylib.delete("cmd", line, [[\s*lua\s*]]) then
+    return
+  end
+  if historylib.delete("cmd", line, [[\s*lua\s*=]]) then
+    return
+  end
+  if historylib.delete("cmd", line, [[\s*=\s*]]) then
+    return
+  end
+end
 function M.delete_histories(_, lines)
   for _, line in ipairs(lines) do
-    if historylib.delete("cmd", line, [[\s*lua\s*]]) then
-      goto continue
-    end
-    if historylib.delete("cmd", line, [[\s*lua\s*=]]) then
-      goto continue
-    end
-    if historylib.delete("cmd", line, [[\s*=\s*]]) then
-      goto continue
-    end
-    ::continue::
+    _delete_history(line)
   end
 end
 
