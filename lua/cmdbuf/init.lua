@@ -12,6 +12,7 @@ local M = {}
 --- | '"vim/search/forward"' # |q/| alternative
 --- | '"vim/search/backward"' # |q?| alternative
 --- | '"vim/input"' # show input history
+--- | '"vim/env"' # environment variable
 --- | '"lua/cmd"' # |q:| alternative for lua command
 --- | '"lua/variable/buffer"' # buffer variable and command
 --- | '"lua/variable/global"' # global variable and command
