@@ -6,13 +6,16 @@ function M.new()
 end
 
 function M.histories()
-  local names = vim.fn.getcompletion("*", "environment")
-  local key_values = {}
-  for _, name in ipairs(names) do
-    local key_value = ("%s=%s"):format(name, os.getenv(name):gsub("\n", "\\n"))
-    table.insert(key_values, key_value)
+  local keys = vim.fn.getcompletion("*", "environment")
+  local lines = {}
+  for _, key in ipairs(keys) do
+    local value = vim.env[key]
+    if value then
+      local line = ("%s=%s"):format(key, value:gsub("\n", "\\n"))
+      table.insert(lines, line)
+    end
   end
-  return key_values
+  return lines
 end
 
 function M.add_history(_, _) end
