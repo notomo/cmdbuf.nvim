@@ -16,9 +16,12 @@ vim.api.nvim_create_autocmd({ "User" }, {
     vim.keymap.set("n", "dd", [[<Cmd>lua require('cmdbuf').delete()<CR>]], { buffer = true })
 
     -- you can filter buffer lines
-    local lines = vim.tbl_filter(function(line)
-      return line ~= "q"
-    end, vim.api.nvim_buf_get_lines(args.buf, 0, -1, false))
+    local lines = vim
+      .iter(vim.api.nvim_buf_get_lines(args.buf, 0, -1, false))
+      :filter(function(line)
+        return line ~= "q"
+      end)
+      :totable()
     vim.api.nvim_buf_set_lines(args.buf, 0, -1, false, lines)
   end,
 })
