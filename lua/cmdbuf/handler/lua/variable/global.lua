@@ -28,11 +28,14 @@ function M.histories(_)
 
   local prefix_length = #"g:" + 1
   local keys = vim.fn.getcompletion("g:*", "var")
-  local vars = vim.tbl_map(function(key)
-    local name = key:sub(prefix_length)
-    local value = vim.api.nvim_get_var(name)
-    return ("%s = %s"):format(name, vim.inspect(value, { newline = " ", indent = " " }))
-  end, keys)
+  local vars = vim
+    .iter(keys)
+    :map(function(key)
+      local name = key:sub(prefix_length)
+      local value = vim.api.nvim_get_var(name)
+      return ("%s = %s"):format(name, vim.inspect(value, { newline = " ", indent = " " }))
+    end)
+    :totable()
 
   local histories = {}
   table.insert(histories, "-- Global variables")
