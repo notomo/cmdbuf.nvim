@@ -45,9 +45,7 @@ CmdbufNew                                              *cmdbuf.nvim-CmdbufNew*
 })
 
 local gen_readme = function()
-  local f = io.open(example_path, "r")
-  local exmaple = f:read("*a")
-  f:close()
+  local exmaple = util.read_all(example_path)
 
   local content = ([[
 # cmdbuf.nvim
@@ -65,8 +63,6 @@ This plugin provides command-line window functions by normal buffer and window.
 ```lua
 %s```]]):format(exmaple)
 
-  local readme = io.open("README.md", "w")
-  readme:write(content)
-  readme:close()
+  util.write("README.md", content)
 end
 gen_readme()
