@@ -33,7 +33,7 @@ function M.histories(self)
 
   local prefix_length = #"b:" + 1
   local keys = vim.api.nvim_buf_call(self._bufnr, function()
-    return vim.fn.getcompletion("b:*", "var")
+    return require("cmdbuf.lib.completion").get("b:*", "var")
   end)
   local vars = vim
     .iter(keys)

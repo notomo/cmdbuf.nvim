@@ -6,7 +6,7 @@ function M.new()
 end
 
 function M.histories()
-  local keys = vim.fn.getcompletion("*", "environment")
+  local keys = require("cmdbuf.lib.completion").get("*", "environment")
   local lines = {}
   for _, key in ipairs(keys) do
     local value = vim.env[key]

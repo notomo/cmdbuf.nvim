@@ -27,7 +27,7 @@ function M.histories(_)
   end)
 
   local prefix_length = #"g:" + 1
-  local keys = vim.fn.getcompletion("g:*", "var")
+  local keys = require("cmdbuf.lib.completion").get("g:*", "var")
   local vars = vim
     .iter(keys)
     :map(function(key)
