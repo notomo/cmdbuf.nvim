@@ -63,4 +63,19 @@ describe("vim/search/backward handler", function()
 
     assert.window_count(1)
   end)
+
+  it("can enter cmdline", function()
+    helper.set_lines([[cmdline
+search backward target]])
+    helper.search("backward")
+
+    vim.fn.histadd("search", "cmdline")
+
+    cmdbuf.open({ type = "vim/search/backward" })
+    helper.search("cmdline")
+
+    helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "<CR>")
+
+    assert.exists_pattern([[^cmdline$]])
+  end)
 end)

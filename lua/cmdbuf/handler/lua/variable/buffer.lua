@@ -52,6 +52,13 @@ function M.histories(self)
   return histories
 end
 
+function M.cmdline(self, line)
+  return {
+    str = ":" .. self._lua(line),
+    column = #"lua vim.b.",
+  }
+end
+
 function M.add_history(self, line)
   vim.fn.histadd("cmd", self._lua(line))
 end

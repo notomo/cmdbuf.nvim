@@ -1,5 +1,6 @@
 local _buffers = {}
 
+--- @class CmdbufBuffer
 local Buffer = {}
 Buffer.__index = Buffer
 
@@ -90,6 +91,11 @@ function Buffer.execute(self, row, close_window)
     return
   end
   self._handler:execute(line)
+end
+
+function Buffer.cmdline(self, row)
+  local line = vim.api.nvim_buf_get_lines(self._bufnr, row - 1, row, false)[1]
+  return self._handler:cmdline(line)
 end
 
 function Buffer.delete_range(self, s, e)

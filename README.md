@@ -27,6 +27,9 @@ vim.api.nvim_create_autocmd({ "User" }, {
     vim.bo.bufhidden = "wipe" -- if you don't need previous opened buffer state
     vim.keymap.set("n", "q", [[<Cmd>quit<CR>]], { nowait = true, buffer = true })
     vim.keymap.set("n", "dd", [[<Cmd>lua require('cmdbuf').delete()<CR>]], { buffer = true })
+    vim.keymap.set({ "n", "i" }, "<C-c>", function()
+      return require("cmdbuf").cmdline_expr()
+    end, { buffer = true, expr = true })
 
     -- you can filter buffer lines
     local lines = vim

@@ -65,4 +65,15 @@ describe("vim/cmd handler", function()
     vim.cmd.edit({ bang = true })
     assert.no.exists_pattern("delete_target_cmd")
   end)
+
+  it("can enter cmdline", function()
+    vim.fn.histadd("cmd", [[let g:cmdbuf_test = 8888]])
+
+    cmdbuf.open()
+    helper.search("8888")
+
+    helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "1<CR>")
+
+    assert.equals(18888, vim.g.cmdbuf_test)
+  end)
 end)

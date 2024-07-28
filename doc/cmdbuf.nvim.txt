@@ -35,6 +35,13 @@ execute({opts})                                             *cmdbuf.execute()*
   Parameters: ~
     {opts} (CmdbufExecuteOption?) |CmdbufExecuteOption|
 
+cmdline_expr()                                         *cmdbuf.cmdline_expr()*
+  Returns keymap expression to start command-line mode.
+  This can be used like |cmdline-window|'s CTRL-C.
+
+  Return: ~
+    (string) 
+
 delete({range})                                              *cmdbuf.delete()*
   Delete current line (or given range) from command history
 
@@ -94,6 +101,9 @@ EXAMPLES                                                *cmdbuf.nvim-EXAMPLES*
       vim.bo.bufhidden = "wipe" -- if you don't need previous opened buffer state
       vim.keymap.set("n", "q", [[<Cmd>quit<CR>]], { nowait = true, buffer = true })
       vim.keymap.set("n", "dd", [[<Cmd>lua require('cmdbuf').delete()<CR>]], { buffer = true })
+      vim.keymap.set({ "n", "i" }, "<C-c>", function()
+        return require("cmdbuf").cmdline_expr()
+      end, { buffer = true, expr = true })
 
       -- you can filter buffer lines
       local lines = vim

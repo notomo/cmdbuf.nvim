@@ -36,4 +36,14 @@ describe("vim/input handler", function()
     vim.cmd.edit({ bang = true })
     assert.no.exists_pattern("delete_target_input")
   end)
+
+  it("can enter cmdline", function()
+    vim.fn.histadd("input", "cmdline_test_input")
+
+    cmdbuf.open({ type = "vim/input" })
+
+    helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "let b:cmdbuf_input=1<CR>")
+
+    assert.equals(1, vim.b.cmdbuf_input)
+  end)
 end)

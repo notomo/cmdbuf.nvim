@@ -3,6 +3,8 @@ local cursorlib = require("cmdbuf.vendor.misclib.cursor")
 
 local _windows = {}
 
+--- @class CmdbufWindow
+--- @field private _buffer CmdbufBuffer
 local Window = {}
 Window.__index = Window
 
@@ -56,6 +58,30 @@ function Window.execute(self, quit)
 
   local row = vim.api.nvim_win_get_cursor(self._window_id)[1]
   return self._buffer:execute(row, close_window)
+end
+
+function Window.cmdline_expr(self)
+  local pos = vim.api.nvim_win_get_cursor(self._window_id)
+  local cmdline = self._buffer:cmdline(pos[1])
+
+  local mode = vim.api.nvim_get_mode().mode
+  local enter_normal_mode_cmd
+  if mode == "i" then
+    enter_normal_mode_cmd = "<ESC>"
+  else
+    enter_normal_mode_cmd = ""
+  end
+
+  local set_pos_cmd = ""
+  if cmdline.column == -1 then
+    set_pos_cmd = ([[<End>]]):format(cmdline.column + pos[2] + 1)
+  else
+    local column = cmdline.column or 0
+    set_pos_cmd = ([[<C-R>=setcmdpos(%d)<CR><BS>]]):format(column + pos[2] + 1)
+  end
+
+  local close_cmd = ([[:<C-u>lua require("cmdbuf.command").close(%s)<CR>]]):format(self._window_id)
+  return enter_normal_mode_cmd .. close_cmd .. cmdline.str .. set_pos_cmd
 end
 
 function Window.delete_range(self, range)

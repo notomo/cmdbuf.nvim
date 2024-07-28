@@ -39,4 +39,14 @@ describe("vim/env handler", function()
     vim.cmd.edit({ bang = true })
     assert.no.exists_pattern("CMDBUF_TEST=delete_target")
   end)
+
+  it("can enter cmdline", function()
+    vim.env.CMDBUF_CMDLINE_TEST = "cmdline"
+
+    cmdbuf.open({ type = "vim/env" })
+
+    helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "<CR>")
+
+    assert.equals("cmdline", vim.env.CMDBUF_CMDLINE_TEST)
+  end)
 end)

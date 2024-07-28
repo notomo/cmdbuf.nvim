@@ -16,6 +16,13 @@ function M.histories()
   end)
 end
 
+function M.cmdline(_, _)
+  -- not supported
+  return {
+    str = ":",
+  }
+end
+
 function M.add_history(_, line)
   vim.fn.histadd("input", line)
 end

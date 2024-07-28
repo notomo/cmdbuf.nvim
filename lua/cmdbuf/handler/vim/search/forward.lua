@@ -21,6 +21,12 @@ function M.histories()
   end)
 end
 
+function M.cmdline(_, line)
+  return {
+    str = "/" .. line,
+  }
+end
+
 function M.add_history(_, line)
   vim.fn.histadd("search", line)
 end

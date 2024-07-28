@@ -31,6 +31,14 @@ local extract_key_value = function(line)
   return key, value
 end
 
+function M.cmdline(_, line)
+  local key, value = extract_key_value(line)
+  return {
+    str = (":lua vim.env[%q] = [=[%s]=]"):format(key, value),
+    column = -1,
+  }
+end
+
 function M.delete_histories(_, lines)
   for _, line in ipairs(lines) do
     local key, _ = extract_key_value(line)

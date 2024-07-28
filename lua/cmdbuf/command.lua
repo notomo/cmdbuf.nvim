@@ -19,8 +19,16 @@ function M.execute(opts)
   Window.current():execute(opts.quit)
 end
 
+function M.cmdline_expr()
+  return Window.current():cmdline_expr()
+end
+
 function M.delete(range)
   Window.current():delete_range(range)
+end
+
+function M.close(window_id)
+  Window.get(window_id):close()
 end
 
 function M.on_win_closed(window_id)

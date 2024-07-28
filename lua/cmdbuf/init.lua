@@ -59,6 +59,13 @@ function M.execute(opts)
   require("cmdbuf.command").execute(opts)
 end
 
+--- Returns keymap expression to start command-line mode.
+--- This can be used like |cmdline-window|'s CTRL-C.
+--- @return string
+function M.cmdline_expr()
+  return require("cmdbuf.command").cmdline_expr()
+end
+
 --- Delete current line (or given range) from command history
 --- @param range integer[]?: 1-based range {start number, end number}
 function M.delete(range)

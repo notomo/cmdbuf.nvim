@@ -65,4 +65,17 @@ describe("vim/search/forward handler", function()
     vim.cmd.edit({ bang = true })
     assert.no.exists_pattern("delete_search_forward")
   end)
+
+  it("can enter cmdline", function()
+    helper.set_lines([[search forward target
+cmdline]])
+    vim.fn.histadd("search", "cmdline")
+
+    cmdbuf.open({ type = "vim/search/forward" })
+    helper.search("cmdline")
+
+    helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "<CR>")
+
+    assert.exists_pattern([[^cmdline$]])
+  end)
 end)

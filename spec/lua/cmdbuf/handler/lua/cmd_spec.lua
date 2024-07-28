@@ -93,4 +93,15 @@ describe("lua/cmd handler", function()
 
     assert.exists_pattern([["equal_test"]])
   end)
+
+  it("can enter cmdline", function()
+    vim.fn.histadd("cmd", [[lua vim.b.cmdbuf_test = 8888]])
+
+    cmdbuf.open({ type = "lua/cmd" })
+    helper.search("8888")
+
+    helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "1<CR>")
+
+    assert.equals(18888, vim.b.cmdbuf_test)
+  end)
 end)

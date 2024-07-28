@@ -62,4 +62,16 @@ describe("lua/variable/global handler", function()
     vim.cmd.edit({ bang = true })
     assert.no.exists_pattern("delete_test")
   end)
+
+  it("can enter cmdline", function()
+    vim.fn.histadd("cmd", [[lua vim.g.cmdbuf_global_test = 8888]])
+
+    cmdbuf.open({ type = typ })
+    helper.search("cmdbuf_global_test")
+    helper.search("8888")
+
+    helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "1<CR>")
+
+    assert.equals(18888, vim.g.cmdbuf_global_test)
+  end)
 end)

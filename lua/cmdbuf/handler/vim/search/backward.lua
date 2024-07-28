@@ -10,6 +10,12 @@ function M.new()
   })
 end
 
+function M.cmdline(_, line)
+  return {
+    str = "?" .. line,
+  }
+end
+
 M.flags = "b"
 M.searchforward = 0
 

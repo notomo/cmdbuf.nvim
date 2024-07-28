@@ -22,6 +22,14 @@ function helper.input(text)
   vim.api.nvim_put({ text }, "c", true, true)
 end
 
+function helper.execute_as_expr_keymap(expr)
+  local key = "[fire]"
+  vim.keymap.set("n", key, function()
+    return expr
+  end, { buffer = true, expr = true, silent = true })
+  vim.api.nvim_feedkeys(key, "rx", true)
+end
+
 function helper.search(pattern)
   local result = vim.fn.search(pattern)
   if result == 0 then
