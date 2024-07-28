@@ -22,7 +22,10 @@ end
 
 function Buffer.create(handler, name, line)
   local bufnr = vim.api.nvim_create_buf(false, true)
-  local tbl = { _bufnr = bufnr, _handler = handler }
+  local tbl = {
+    _bufnr = bufnr,
+    _handler = handler,
+  }
   local self = setmetatable(tbl, Buffer)
   _buffers[bufnr] = self
 
