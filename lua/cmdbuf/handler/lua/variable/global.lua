@@ -12,18 +12,26 @@ function M._lua(cmd)
   return "lua vim.g." .. cmd
 end
 
+local parse = function(cmd)
+  local s, e = cmd:find("^%s*lua%s+vim%.g%.")
+  if not s then
+    return nil
+  end
+  local line = cmd:sub(e + 1)
+  local splitted = vim.split(line, "%s*=%s*", false)
+  if #splitted < 2 then
+    return nil
+  end
+  return line
+end
+
+function M.parse(_, line)
+  return parse(line) or line
+end
+
 function M.histories(_)
   local cmds = historylib.filter_map("cmd", function(cmd)
-    local s, e = cmd:find("^%s*lua%s+vim%.g%.")
-    if not s then
-      return nil
-    end
-    local line = cmd:sub(e + 1)
-    local splitted = vim.split(line, "%s*=%s*", false)
-    if #splitted < 2 then
-      return nil
-    end
-    return line
+    return parse(cmd)
   end)
 
   local prefix_length = #"g:" + 1

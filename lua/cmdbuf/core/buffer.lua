@@ -76,7 +76,7 @@ function Buffer.load(self, line)
   vim.validate({ line = { line, "string", true } })
 
   local lines = self._handler:histories()
-  table.insert(lines, line or "")
+  table.insert(lines, self._handler:parse(line or ""))
   vim.api.nvim_buf_set_lines(self._bufnr, 0, -1, false, lines)
 
   vim.bo[self._bufnr].filetype = self._handler.filetype

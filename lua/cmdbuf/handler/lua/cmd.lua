@@ -12,21 +12,29 @@ function M._lua(cmd)
   return "lua " .. cmd
 end
 
+local parse = function(line)
+  do
+    local s, e = line:find("^%s*lua%s*=?")
+    if s then
+      return line:sub(e + 1)
+    end
+  end
+  do
+    local s, e = line:find("^%s*=")
+    if s then
+      return line:sub(e + 1)
+    end
+  end
+  return nil
+end
+
+function M.parse(_, line)
+  return parse(line) or line
+end
+
 function M.histories()
   return historylib.filter_map("cmd", function(cmd)
-    do
-      local s, e = cmd:find("^%s*lua%s*=?")
-      if s then
-        return cmd:sub(e + 1)
-      end
-    end
-    do
-      local s, e = cmd:find("^%s*=")
-      if s then
-        return cmd:sub(e + 1)
-      end
-    end
-    return nil
+    return parse(cmd)
   end)
 end
 

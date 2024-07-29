@@ -83,4 +83,13 @@ describe("lua/variable/buffer handler", function()
 
     assert.equals(18888, vim.b.cmdbuf_test)
   end)
+
+  it("can specific lua prefixed line", function()
+    cmdbuf.open({
+      type = typ,
+      line = "lua vim.b.test=1",
+    })
+
+    assert.current_line("test=1")
+  end)
 end)

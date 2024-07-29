@@ -18,6 +18,11 @@ function M.histories()
   return lines
 end
 
+function M.parse(_, line)
+  -- not supported
+  return line
+end
+
 function M.add_history(_, _) end
 
 local extract_key_value = function(line)

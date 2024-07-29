@@ -8,6 +8,10 @@ function M.new()
   return setmetatable({}, M)
 end
 
+function M.parse(_, line)
+  return line
+end
+
 function M.histories()
   return historylib.filter_map("cmd", function(cmd)
     if cmd == "" then

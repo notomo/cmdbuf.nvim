@@ -106,4 +106,13 @@ describe("lua/cmd handler", function()
 
     assert.equals(18888, vim.b.cmdbuf_test)
   end)
+
+  it("can specific lua prefixed line", function()
+    cmdbuf.open({
+      type = typ,
+      line = "lua print(8888)",
+    })
+
+    assert.current_line("print(8888)")
+  end)
 end)

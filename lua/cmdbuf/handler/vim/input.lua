@@ -7,6 +7,10 @@ function M.new()
   return setmetatable({}, M)
 end
 
+function M.parse(_, line)
+  return line
+end
+
 function M.histories()
   return historylib.filter_map("input", function(input)
     if input == "" then

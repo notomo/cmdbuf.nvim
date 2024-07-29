@@ -74,4 +74,13 @@ describe("lua/variable/global handler", function()
 
     assert.equals(18888, vim.g.cmdbuf_global_test)
   end)
+
+  it("can specific lua prefixed line", function()
+    cmdbuf.open({
+      type = typ,
+      line = "lua vim.g.test=1",
+    })
+
+    assert.current_line("test=1")
+  end)
 end)
