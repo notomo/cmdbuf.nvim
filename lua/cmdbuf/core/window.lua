@@ -8,6 +8,7 @@ local _windows = {}
 local Window = {}
 Window.__index = Window
 
+--- @param buffer CmdbufBuffer
 function Window.open(buffer, created, open_window, reusable_window_ids, line, column)
   local origin_window_id = vim.api.nvim_get_current_win()
 
@@ -24,8 +25,11 @@ function Window.open(buffer, created, open_window, reusable_window_ids, line, co
   elseif line then
     cursorlib.to_bottom(window_id)
   end
+
   if column then
-    cursorlib.set_column(column - 1)
+    local row = vim.api.nvim_win_get_cursor(window_id)[1]
+    local cmdline = buffer:cmdline(row)
+    cursorlib.set_column(column - cmdline.column - 1)
   end
 end
 
@@ -72,13 +76,8 @@ function Window.cmdline_expr(self)
     enter_normal_mode_cmd = ""
   end
 
-  local set_pos_cmd = ""
-  if cmdline.column == -1 then
-    set_pos_cmd = ([[<End>]]):format(cmdline.column + pos[2] + 1)
-  else
-    local column = cmdline.column or 0
-    set_pos_cmd = ([[<C-R>=setcmdpos(%d)<CR><BS>]]):format(column + pos[2] + 1)
-  end
+  local column = cmdline.column
+  local set_pos_cmd = ([[<C-R>=setcmdpos(%d)<CR><BS>]]):format(column + pos[2] + 1)
 
   local close_cmd = ([[:<C-u>lua require("cmdbuf.command").close(%s)<CR>]]):format(self._window_id)
   return enter_normal_mode_cmd .. close_cmd .. cmdline.str .. set_pos_cmd

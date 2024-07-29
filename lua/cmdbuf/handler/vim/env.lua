@@ -38,9 +38,10 @@ end
 
 function M.cmdline(_, line)
   local key, value = extract_key_value(line)
+  local str = (":lua vim.env[%q] = [=[%s]=]"):format(key, value)
   return {
-    str = (":lua vim.env[%q] = [=[%s]=]"):format(key, value),
-    column = -1,
+    str = str,
+    column = #str,
   }
 end
 

@@ -28,6 +28,7 @@ end
 function M.cmdline(_, line)
   return {
     str = "/" .. line,
+    column = 0,
   }
 end
 

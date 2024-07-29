@@ -115,4 +115,14 @@ describe("lua/cmd handler", function()
 
     assert.current_line("print(8888)")
   end)
+
+  it("adjusts column for lua prefixed line", function()
+    cmdbuf.open({
+      type = typ,
+      line = "lua vim.b.test = 1",
+      column = 5,
+    })
+
+    assert.cursor_word("vim")
+  end)
 end)

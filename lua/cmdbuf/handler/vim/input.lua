@@ -24,6 +24,7 @@ function M.cmdline(_, _)
   -- not supported
   return {
     str = ":",
+    column = 0,
   }
 end
 
