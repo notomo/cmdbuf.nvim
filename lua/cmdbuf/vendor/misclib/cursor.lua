@@ -15,6 +15,12 @@ function M.set_column(column, window_id)
   })
   window_id = window_id or 0
   local row = vim.api.nvim_win_get_cursor(window_id)[1]
+
+  local max_column = vim.api.nvim_win_call(window_id, function()
+    return vim.fn.col("$")
+  end)
+  column = math.max(0, column)
+  column = math.min(column, max_column)
   vim.api.nvim_win_set_cursor(window_id, { row, column })
 end
 
