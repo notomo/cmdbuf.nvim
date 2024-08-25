@@ -11,7 +11,7 @@ local M = {}
 --- | '"vim/cmd"' # |q:| alternative
 --- | '"vim/search/forward"' # |q/| alternative
 --- | '"vim/search/backward"' # |q?| alternative
---- | '"vim/input"' # show input history
+--- | '"vim/input"' # show input history (not supported execute)
 --- | '"vim/env"' # environment variable
 --- | '"lua/cmd"' # |q:| alternative for lua command
 --- | '"lua/variable/buffer"' # buffer variable and command

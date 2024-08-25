@@ -39,6 +39,7 @@ function M.delete_histories(_, lines)
 end
 
 function M.execute(_, _)
+  -- not supported
   return nil
 end
 
