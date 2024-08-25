@@ -268,4 +268,26 @@ history2]])
     assert.window_id(window_id)
     assert.exists_pattern("history1")
   end)
+
+  it("can get current buffer's context", function()
+    cmdbuf.open()
+
+    local got = cmdbuf.get_context()
+
+    assert.is_same(got, {
+      type = "vim/cmd",
+    })
+  end)
+
+  it("can get specified buffer's context", function()
+    cmdbuf.open()
+    local bufnr = vim.api.nvim_get_current_buf()
+    vim.cmd.tabedit()
+
+    local got = cmdbuf.get_context({ bufnr = bufnr })
+
+    assert.is_same(got, {
+      type = "vim/cmd",
+    })
+  end)
 end)

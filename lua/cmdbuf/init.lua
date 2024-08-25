@@ -59,6 +59,19 @@ function M.execute(opts)
   require("cmdbuf.command").execute(opts)
 end
 
+--- @class CmdbufGetContextOption
+--- @field bufnr integer? default: current buffer number
+
+--- @class CmdbufContext
+--- @field type CmdbufHandlerType |CmdbufHandlerType|
+
+--- Returns cmdbuf buffer context.
+--- @param opts CmdbufGetContextOption?: |CmdbufGetContextOption|
+--- @return CmdbufContext # |CmdbufContext|
+function M.get_context(opts)
+  return require("cmdbuf.command").get_context(opts)
+end
+
 --- Returns keymap expression to start command-line mode.
 --- This can be used like |cmdline-window|'s CTRL-C.
 --- @return string

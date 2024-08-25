@@ -18,14 +18,17 @@ vim.api.nvim_create_autocmd({ "User" }, {
       return require("cmdbuf").cmdline_expr()
     end, { buffer = true, expr = true })
 
-    -- you can filter buffer lines
-    local lines = vim
-      .iter(vim.api.nvim_buf_get_lines(args.buf, 0, -1, false))
-      :filter(function(line)
-        return line ~= "q"
-      end)
-      :totable()
-    vim.api.nvim_buf_set_lines(args.buf, 0, -1, false, lines)
+    local typ = require("cmdbuf").get_context().type
+    if typ == "vim/cmd" then
+      -- you can filter buffer lines
+      local lines = vim
+        .iter(vim.api.nvim_buf_get_lines(args.buf, 0, -1, false))
+        :filter(function(line)
+          return line ~= "q"
+        end)
+        :totable()
+      vim.api.nvim_buf_set_lines(args.buf, 0, -1, false, lines)
+    end
   end,
 })
 

@@ -35,6 +35,15 @@ execute({opts})                                             *cmdbuf.execute()*
   Parameters: ~
     {opts} (CmdbufExecuteOption?) |CmdbufExecuteOption|
 
+get_context({opts})                                     *cmdbuf.get_context()*
+  Returns cmdbuf buffer context.
+
+  Parameters: ~
+    {opts} (CmdbufGetContextOption?) |CmdbufGetContextOption|
+
+  Return: ~
+    (CmdbufContext) |CmdbufContext|
+
 cmdline_expr()                                         *cmdbuf.cmdline_expr()*
   Returns keymap expression to start command-line mode.
   This can be used like |cmdline-window|'s CTRL-C.
@@ -75,6 +84,14 @@ CmdbufExecuteOption                                      *CmdbufExecuteOption*
 
 - {quit} (boolean?) whether quit the window after execution.
 
+CmdbufGetContextOption                                *CmdbufGetContextOption*
+
+- {bufnr} (integer?) default: current buffer number
+
+CmdbufContext                                                  *CmdbufContext*
+
+- {type} (CmdbufHandlerType) |CmdbufHandlerType|
+
 ==============================================================================
 AUTOCOMMANDS                                        *cmdbuf.nvim-AUTOCOMMANDS*
 
@@ -105,14 +122,17 @@ EXAMPLES                                                *cmdbuf.nvim-EXAMPLES*
         return require("cmdbuf").cmdline_expr()
       end, { buffer = true, expr = true })
 
-      -- you can filter buffer lines
-      local lines = vim
-        .iter(vim.api.nvim_buf_get_lines(args.buf, 0, -1, false))
-        :filter(function(line)
-          return line ~= "q"
-        end)
-        :totable()
-      vim.api.nvim_buf_set_lines(args.buf, 0, -1, false, lines)
+      local typ = require("cmdbuf").get_context().type
+      if typ == "vim/cmd" then
+        -- you can filter buffer lines
+        local lines = vim
+          .iter(vim.api.nvim_buf_get_lines(args.buf, 0, -1, false))
+          :filter(function(line)
+            return line ~= "q"
+          end)
+          :totable()
+        vim.api.nvim_buf_set_lines(args.buf, 0, -1, false, lines)
+      end
     end,
   })
 

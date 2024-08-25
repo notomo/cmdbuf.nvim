@@ -19,6 +19,17 @@ function M.execute(opts)
   Window.current():execute(opts.quit)
 end
 
+function M.get_context(raw_opts)
+  local opts = require("cmdbuf.option").new_get_context_opts(raw_opts)
+  local typ = vim.api.nvim_buf_get_name(opts.bufnr):match("cmdbuf://(.+)-buffer")
+  if not typ then
+    require("cmdbuf.vendor.misclib.message").error(("The buffer(%d) is not cmdbuf buffer"):format(opts.bufnr))
+  end
+  return {
+    type = typ,
+  }
+end
+
 function M.cmdline_expr()
   return Window.current():cmdline_expr()
 end

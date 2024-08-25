@@ -21,4 +21,13 @@ function M.new_execute_opts(raw_opts)
   return vim.tbl_deep_extend("force", M.default_execute_opts, raw_opts)
 end
 
+M.default_get_context_opts = {
+  bufnr = 0,
+}
+function M.new_get_context_opts(raw_opts)
+  vim.validate({ raw_opts = { raw_opts, "table", true } })
+  raw_opts = raw_opts or {}
+  return vim.tbl_deep_extend("force", M.default_get_context_opts, raw_opts)
+end
+
 return M
