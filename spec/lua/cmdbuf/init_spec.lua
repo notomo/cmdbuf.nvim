@@ -1,5 +1,6 @@
 local helper = require("cmdbuf.test.helper")
 local cmdbuf = helper.require("cmdbuf")
+local assert = require("assertlib").typed(assert)
 
 describe("cmdbuf.nvim", function()
   before_each(helper.before_each)
@@ -128,7 +129,7 @@ history2]])
 
     cmdbuf.open()
 
-    assert.is_same("fired_cmdbuf_new!", vim.b.cmdbuf_test)
+    assert.same("fired_cmdbuf_new!", vim.b.cmdbuf_test)
   end)
 
   it("can restore the buffer even if it was closed by :quit!", function()
@@ -274,7 +275,7 @@ history2]])
 
     local got = cmdbuf.get_context()
 
-    assert.is_same(got, {
+    assert.same(got, {
       type = "vim/cmd",
     })
   end)
@@ -286,7 +287,7 @@ history2]])
 
     local got = cmdbuf.get_context({ bufnr = bufnr })
 
-    assert.is_same(got, {
+    assert.same(got, {
       type = "vim/cmd",
     })
   end)

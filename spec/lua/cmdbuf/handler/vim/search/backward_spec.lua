@@ -1,5 +1,6 @@
 local helper = require("cmdbuf.test.helper")
 local cmdbuf = helper.require("cmdbuf")
+local assert = require("assertlib").typed(assert)
 
 describe("vim/search/backward handler", function()
   before_each(helper.before_each)
@@ -22,9 +23,9 @@ describe("vim/search/backward handler", function()
     cmdbuf.execute({ quit = true })
 
     assert.cursor_word("target")
-    assert.equals("target", vim.fn.getreg("/"))
-    assert.equals(1, vim.v.hlsearch)
-    assert.equals(0, vim.v.searchforward)
+    assert.equal("target", vim.fn.getreg("/"))
+    assert.equal(1, vim.v.hlsearch)
+    assert.equal(0, vim.v.searchforward)
   end)
 
   it("adds history on execution", function()

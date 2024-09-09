@@ -1,5 +1,6 @@
 local helper = require("cmdbuf.test.helper")
 local cmdbuf = helper.require("cmdbuf")
+local assert = require("assertlib").typed(assert)
 
 describe("lua/variable/buffer handler", function()
   before_each(helper.before_each)
@@ -20,7 +21,7 @@ describe("lua/variable/buffer handler", function()
 
     cmdbuf.execute({ quit = true })
 
-    assert.is_same(8888, vim.b.execute_test)
+    assert.same(8888, vim.b.execute_test)
   end)
 
   it("adds history on execution", function()
@@ -81,7 +82,7 @@ describe("lua/variable/buffer handler", function()
 
     helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "1<CR>")
 
-    assert.equals(18888, vim.b.cmdbuf_test)
+    assert.equal(18888, vim.b.cmdbuf_test)
   end)
 
   it("can specific lua prefixed line", function()

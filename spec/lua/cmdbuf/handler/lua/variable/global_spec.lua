@@ -1,5 +1,6 @@
 local helper = require("cmdbuf.test.helper")
 local cmdbuf = helper.require("cmdbuf")
+local assert = require("assertlib").typed(assert)
 
 describe("lua/variable/global handler", function()
   before_each(helper.before_each)
@@ -20,7 +21,7 @@ describe("lua/variable/global handler", function()
 
     cmdbuf.execute({ quit = true })
 
-    assert.is_same(8888, vim.g.execute_test)
+    assert.same(8888, vim.g.execute_test)
   end)
 
   it("adds history on execution", function()
@@ -72,7 +73,7 @@ describe("lua/variable/global handler", function()
 
     helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "1<CR>")
 
-    assert.equals(18888, vim.g.cmdbuf_global_test)
+    assert.equal(18888, vim.g.cmdbuf_global_test)
   end)
 
   it("can specific lua prefixed line", function()

@@ -1,5 +1,6 @@
 local helper = require("cmdbuf.test.helper")
 local cmdbuf = helper.require("cmdbuf")
+local assert = require("assertlib").typed(assert)
 
 describe("vim/env handler", function()
   before_each(function()
@@ -49,6 +50,6 @@ describe("vim/env handler", function()
 
     helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "<CR>")
 
-    assert.equals("cmdline", vim.env.CMDBUF_CMDLINE_TEST)
+    assert.equal("cmdline", vim.env.CMDBUF_CMDLINE_TEST)
   end)
 end)

@@ -1,5 +1,6 @@
 local helper = require("cmdbuf.test.helper")
 local cmdbuf = helper.require("cmdbuf")
+local assert = require("assertlib").typed(assert)
 
 describe("lua/cmd handler", function()
   before_each(helper.before_each)
@@ -104,7 +105,7 @@ describe("lua/cmd handler", function()
 
     helper.execute_as_expr_keymap(cmdbuf.cmdline_expr() .. "1<CR>")
 
-    assert.equals(18888, vim.b.cmdbuf_test)
+    assert.equal(18888, vim.b.cmdbuf_test)
   end)
 
   it("can specific lua prefixed line", function()
