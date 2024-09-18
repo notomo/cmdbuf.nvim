@@ -1,6 +1,17 @@
 local _buffers = {}
 
+--- @class CmdbufHandler
+--- @field parse fun(self:CmdbufHandler,line:string)
+--- @field histories fun(self:CmdbufHandler)
+--- @field cmdline fun(self:CmdbufHandler,line:string)
+--- @field add_history fun(self:CmdbufHandler,line:string)
+--- @field delete_histories fun(self:CmdbufHandler,lines:string[])
+--- @field execute fun(self:CmdbufHandler,line:string)
+--- @field filetype string
+
 --- @class CmdbufBuffer
+--- @field private _bufnr integer
+--- @field private _handler CmdbufHandler
 local Buffer = {}
 Buffer.__index = Buffer
 

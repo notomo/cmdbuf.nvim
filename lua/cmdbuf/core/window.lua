@@ -5,6 +5,8 @@ local _windows = {}
 
 --- @class CmdbufWindow
 --- @field private _buffer CmdbufBuffer
+--- @field private _window_id integer
+--- @field private _origin_window_id integer
 local Window = {}
 Window.__index = Window
 

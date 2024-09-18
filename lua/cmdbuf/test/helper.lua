@@ -35,7 +35,7 @@ function helper.search(pattern)
   if result == 0 then
     local info = debug.getinfo(2)
     local pos = ("%s:%d"):format(info.source, info.currentline)
-    local lines = table.concat(vim.fn.getbufline("%", 1, "$"), "\n")
+    local lines = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
     local msg = ("on %s: `%s` not found in buffer:\n%s"):format(pos, pattern, lines)
     assert(false, msg)
   end

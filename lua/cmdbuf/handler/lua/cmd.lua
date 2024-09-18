@@ -67,7 +67,9 @@ function M.delete_histories(_, lines)
 end
 
 function M.execute(self, line)
-  local ok, msg = pcall(vim.cmd, self._lua(line))
+  local ok, msg = pcall(function()
+    vim.cmd(self._lua(line))
+  end)
   if not ok then
     messagelib.user_vim_error(msg)
     return
