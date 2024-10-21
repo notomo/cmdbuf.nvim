@@ -1,7 +1,7 @@
 local M = {}
 
+--- @param width integer?
 function M.vsplit_layout(width)
-  vim.validate({ width = { width, "number", true } })
   return function()
     vim.cmd.vsplit()
     vim.cmd.wincmd("l")
@@ -11,8 +11,8 @@ function M.vsplit_layout(width)
   end
 end
 
+--- @param height integer?
 function M.split_layout(height)
-  vim.validate({ height = { height, "number", true } })
   return function()
     vim.cmd.split({ mods = { split = "botright" } })
     vim.cmd.wincmd("j")

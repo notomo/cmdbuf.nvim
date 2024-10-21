@@ -2,9 +2,8 @@ local modulelib = require("cmdbuf.vendor.misclib.module")
 
 local Handler = {}
 
+--- @param typ string
 function Handler.new(typ)
-  vim.validate({ type = { typ, "string" } })
-
   local Class = modulelib.find("cmdbuf/handler/" .. typ)
   if not Class then
     return nil, "not found handler: " .. typ

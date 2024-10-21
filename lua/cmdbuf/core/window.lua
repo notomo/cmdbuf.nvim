@@ -40,8 +40,8 @@ function Window.current()
   return Window.get(window_id)
 end
 
+--- @param window_id integer
 function Window.get(window_id)
-  vim.validate({ window_id = { window_id, "number" } })
   local bufnr = vim.api.nvim_win_get_buf(window_id)
   local origin_window_id = _windows[window_id]
   local tbl = {
@@ -85,9 +85,8 @@ function Window.cmdline_expr(self)
   return enter_normal_mode_cmd .. close_cmd .. cmdline.str .. set_pos_cmd
 end
 
+--- @param range [integer,integer]?
 function Window.delete_range(self, range)
-  vim.validate({ range = { range, "table", true } })
-
   local s, e
   if not range then
     local row = vim.api.nvim_win_get_cursor(self._window_id)[1]
@@ -96,7 +95,6 @@ function Window.delete_range(self, range)
   end
 
   if range then
-    vim.validate({ ["range[1]"] = { range[1], "number" }, ["range[2]"] = { range[2], "number" } })
     s = range[1] - 1
     e = range[2]
   end

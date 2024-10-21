@@ -69,8 +69,8 @@ function Buffer.create(handler, name, line)
   return self
 end
 
+--- @param bufnr integer
 function Buffer.get(bufnr)
-  vim.validate({ bufnr = { bufnr, "number" } })
   local buffer = _buffers[bufnr]
   if not buffer then
     error(("state is not found in buffer: %s"):format(bufnr))
@@ -83,9 +83,8 @@ function Buffer.current()
   return Buffer.get(bufnr)
 end
 
+--- @param line string?
 function Buffer.load(self, line)
-  vim.validate({ line = { line, "string", true } })
-
   local lines = self._handler:histories()
   table.insert(lines, self._handler:parse(line or ""))
   vim.api.nvim_buf_set_lines(self._bufnr, 0, -1, false, lines)
@@ -93,9 +92,9 @@ function Buffer.load(self, line)
   vim.bo[self._bufnr].filetype = self._handler.filetype
 end
 
+--- @param row integer
+--- @param close_window function
 function Buffer.execute(self, row, close_window)
-  vim.validate({ row = { row, "number" }, close_window = { close_window, "function" } })
-
   local line = vim.api.nvim_buf_get_lines(self._bufnr, row - 1, row, false)[1]
   self._handler:add_history(line)
 
@@ -112,8 +111,9 @@ function Buffer.cmdline(self, row)
   return self._handler:cmdline(line)
 end
 
+--- @param s integer
+--- @param e integer
 function Buffer.delete_range(self, s, e)
-  vim.validate({ s = { s, "number" }, e = { e, "number" } })
   local lines = vim.api.nvim_buf_get_lines(self._bufnr, s, e, false)
   self._handler:delete_histories(lines)
   vim.api.nvim_buf_set_lines(self._bufnr, s, e, false, {})

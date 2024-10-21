@@ -19,8 +19,9 @@ local range = function(s, e, step)
   end
 end
 
+--- @param name string
+--- @param f function
 function M.filter_map(name, f)
-  vim.validate({ name = { name, "string" }, f = { f, "function" } })
   local count = vim.fn.histnr(name)
   return vim
     .iter(range(1, count, 1))
