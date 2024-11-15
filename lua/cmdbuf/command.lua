@@ -5,9 +5,10 @@ local M = {}
 function M.open(opts)
   opts = require("cmdbuf.option").new_open_opts(opts)
 
-  local handler, err = require("cmdbuf.handler").new(opts.type)
-  if err then
-    require("cmdbuf.vendor.misclib.message").error(err)
+  local handler = require("cmdbuf.handler").new(opts.type)
+  if type(handler) == "string" then
+    local err = handler
+    error("[cmdbuf] " .. err, 0)
   end
 
   local buffer, created = require("cmdbuf.core.buffer").get_or_create(handler, opts.line)
@@ -23,7 +24,7 @@ function M.get_context(raw_opts)
   local opts = require("cmdbuf.option").new_get_context_opts(raw_opts)
   local typ = vim.api.nvim_buf_get_name(opts.bufnr):match("cmdbuf://(.+)-buffer")
   if not typ then
-    require("cmdbuf.vendor.misclib.message").error(("The buffer(%d) is not cmdbuf buffer"):format(opts.bufnr))
+    error(("[cmdbuf] The buffer(%d) is not cmdbuf buffer"):format(opts.bufnr), 0)
   end
   return {
     type = typ,
