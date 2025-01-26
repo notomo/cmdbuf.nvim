@@ -8,7 +8,7 @@ end)
 
 -- Custom buffer mappings
 vim.api.nvim_create_autocmd({ "User" }, {
-  group = vim.api.nvim_create_augroup("cmdbuf_setting", {}),
+  group = vim.api.nvim_create_augroup("config.cmdbuf", {}),
   pattern = { "CmdbufNew" },
   callback = function(args)
     vim.bo.bufhidden = "wipe" -- if you don't need previous opened buffer state
