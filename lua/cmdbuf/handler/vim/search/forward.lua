@@ -48,6 +48,7 @@ function M.execute(self, line)
   vim.cmd.let({ args = { "v:searchforward", "=", self.searchforward } })
   local ok, result = pcall(vim.fn.search, line, self.flags)
   if not ok then
+    ---@diagnostic disable-next-line: param-type-mismatch
     messagelib.user_vim_error(result)
     return
   end
