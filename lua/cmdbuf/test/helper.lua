@@ -5,9 +5,9 @@ helper.root = helper.find_plugin_root(plugin_name)
 vim.opt.packpath:prepend(vim.fs.joinpath(helper.root, "spec/.shared/packages"))
 require("assertlib").register(require("vusted.assert").register)
 
-helper.cleanup()
-
-function helper.before_each() end
+function helper.before_each()
+  helper.cleanup()
+end
 
 function helper.after_each()
   helper.cleanup()

@@ -40,7 +40,7 @@ describe("lua/cmd handler", function()
 
     cmdbuf.execute({ quit = true })
 
-    assert.exists_message([[E5107: Error loading lua %[string ":lua"%]:1: '%=' expected near '<eof>']])
+    assert.exists_message([[E5107: Lua: %[string ":lua"%]:1: '%=' expected near '<eof>']])
   end)
 
   it("can delete a lua command from history", function()
