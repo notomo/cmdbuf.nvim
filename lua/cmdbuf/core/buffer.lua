@@ -47,20 +47,20 @@ function Buffer.create(handler, name, line)
   vim.api.nvim_buf_set_keymap(bufnr, "i", "<CR>", [[<ESC><Cmd>lua require("cmdbuf").execute({quit = true})<CR>]], {})
 
   vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
-    buffer = bufnr,
+    buf = bufnr,
     callback = function()
       self:load()
     end,
   })
   vim.api.nvim_create_autocmd({ "WinClosed" }, {
-    buffer = bufnr,
+    buf = bufnr,
     callback = function(args)
       local window_id = tonumber(args.file)
       require("cmdbuf.command").on_win_closed(window_id)
     end,
   })
   vim.api.nvim_create_autocmd({ "BufWipeout" }, {
-    buffer = bufnr,
+    buf = bufnr,
     callback = function()
       self:cleanup()
     end,

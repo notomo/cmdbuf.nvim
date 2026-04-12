@@ -26,7 +26,7 @@ function helper.execute_as_expr_keymap(expr)
   local key = "[fire]"
   vim.keymap.set("n", key, function()
     return expr
-  end, { buffer = true, expr = true, silent = true })
+  end, { buf = 0, expr = true, silent = true })
   vim.api.nvim_feedkeys(key, "rx", true)
 end
 

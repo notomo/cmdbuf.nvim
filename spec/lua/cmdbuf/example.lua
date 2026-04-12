@@ -12,11 +12,11 @@ vim.api.nvim_create_autocmd({ "User" }, {
   pattern = { "CmdbufNew" },
   callback = function(args)
     vim.bo.bufhidden = "wipe" -- if you don't need previous opened buffer state
-    vim.keymap.set("n", "q", [[<Cmd>quit<CR>]], { nowait = true, buffer = true })
-    vim.keymap.set("n", "dd", [[<Cmd>lua require('cmdbuf').delete()<CR>]], { buffer = true })
+    vim.keymap.set("n", "q", [[<Cmd>quit<CR>]], { nowait = true, buf = 0 })
+    vim.keymap.set("n", "dd", [[<Cmd>lua require('cmdbuf').delete()<CR>]], { buf = 0 })
     vim.keymap.set({ "n", "i" }, "<C-c>", function()
       return require("cmdbuf").cmdline_expr()
-    end, { buffer = true, expr = true })
+    end, { buf = 0, expr = true })
 
     local typ = require("cmdbuf").get_context().type
     if typ == "vim/cmd" then
