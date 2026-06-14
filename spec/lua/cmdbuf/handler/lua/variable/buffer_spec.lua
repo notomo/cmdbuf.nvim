@@ -1,6 +1,8 @@
+local ntf = require("ntf")
+local describe, it, before_each, after_each = ntf.describe, ntf.it, ntf.before_each, ntf.after_each
 local helper = require("cmdbuf.test.helper")
-local cmdbuf = helper.require("cmdbuf")
-local assert = require("assertlib").typed(assert)
+local cmdbuf = require("cmdbuf")
+local assert = require("assertlib").typed(ntf.assert)
 
 describe("lua/variable/buffer handler", function()
   before_each(helper.before_each)
