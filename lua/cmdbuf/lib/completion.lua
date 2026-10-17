@@ -1,10 +1,10 @@
 local M = {}
 
 function M.get(pattern, typ)
-  local tmp = vim.opt.wildoptions
-  vim.opt.wildoptions:remove("fuzzy")
+  local tmp = vim.o.wildoptions
+  vim.api.nvim_set_option_value("wildoptions", "fuzzy", { operation = "remove" })
   local restore = function()
-    vim.opt.wildoptions = tmp
+    vim.o.wildoptions = tmp
   end
 
   local ok, result = pcall(vim.fn.getcompletion, pattern, typ)
