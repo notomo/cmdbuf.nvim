@@ -2,6 +2,11 @@
 
 [![ci](https://github.com/notomo/cmdbuf.nvim/workflows/ci/badge.svg?branch=main)](https://github.com/notomo/cmdbuf.nvim/actions?query=workflow%3Aci+branch%3Amain)
 
+> [!NOTE]
+>
+> Since Nvim 0.13, the builtin command-line window is implemented as a normal buffer and window.  
+> You can use window commands such as `wincmd` in it as usual, so this plugin is no longer maintained.
+
 The builtin command-line window is a special window.  
 For example, you cannot leave it by `wincmd`.  
 This plugin provides command-line window functions by normal buffer and window.  
